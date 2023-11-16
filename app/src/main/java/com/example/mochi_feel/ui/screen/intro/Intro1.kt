@@ -45,7 +45,7 @@ fun ViewIntro1() {
         )
         CircleProgress(introPage = 1)
         Text(
-            text = "Welcome to MochiFeel",
+            text = "Welcome to Mochi Feel",
             fontSize = 24.sp,
             color = CalmGreen,
             fontWeight = FontWeight.ExtraBold
