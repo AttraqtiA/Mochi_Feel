@@ -8,12 +8,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.text.SimpleDateFormat
+import java.util.Locale
 
 class HomeViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(
         HomeUIState(
             "Karyna",
-            SimpleDateFormat("yyyy-MM-dd").parse("2023-10-12")!!,
+            SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse("2023-10-12")!!
+                .also { SimpleDateFormat("EEEE, dd MMMM yyyy", Locale.getDefault()).format(it) },
             15,
             mutableListOf(
                 EntryBox(
