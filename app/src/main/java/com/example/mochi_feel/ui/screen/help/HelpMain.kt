@@ -70,15 +70,15 @@ fun HelpMainView() {
         Column (
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .shadow(
-                    elevation = 30.dp,
-                    spotColor = Color(0x4D238A91),
-                    ambientColor = Color(0x4D238A91)
-                )
                 .width(148.dp)
                 .height(148.dp)
+                .shadow(
+                    elevation = 40.dp,
+                    spotColor = Color(0xFF238A91),
+                    ambientColor = Color(0xFF238A91)
+                )
                 .background(color = Color(0xFF4ABDC0), shape = RoundedCornerShape(size = 10.dp)),
-        ) {
+            ) {
             Image(
                 painter = painterResource(id = R.drawable.help_1),
                 contentDescription = "Something Random Icon",
@@ -108,6 +108,11 @@ fun HelpMainView() {
             modifier = Modifier
                 .width(148.dp)
                 .height(148.dp)
+                .shadow(
+                    elevation = 40.dp,
+                    spotColor = Color(0xFF238A91),
+                    ambientColor = Color(0xFF238A91)
+                )
                 .background(color = Color(0xFF4ABDC0), shape = RoundedCornerShape(size = 10.dp)),
         ) {
             Image(
