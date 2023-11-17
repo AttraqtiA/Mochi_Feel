@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -37,6 +36,7 @@ import com.example.mochi_feel.R
 import com.example.mochi_feel.ui.theme.CalmGreen
 import com.example.mochi_feel.ui.theme.inter
 
+// might change to showing the step 1 by 1
 @Composable
 fun EmotionView() {
     LazyColumn (
@@ -66,7 +66,7 @@ fun EmotionView() {
                 verticalAlignment = Alignment.Bottom
             ) {
                 Text(
-                    text = "Try Reflecting Journalling",
+                    text = "Try Reflecting Journaling",
                     style = TextStyle(
                         fontSize = 20.sp,
                         lineHeight = 21.sp,
@@ -86,23 +86,23 @@ fun EmotionView() {
                         .rotate(15f)
                 )
             }
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(16.dp))
         }
 
         item {
             Step1Box()
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
         }
 
         item {
             Step2Box()
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(16.dp))
         }
 
         item {
             Step3Box()
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(16.dp))
         }
 
         item {
@@ -111,7 +111,8 @@ fun EmotionView() {
                 horizontalArrangement = Arrangement.Center
             ) {
                 Button(
-                    onClick = {  }, colors = ButtonDefaults.buttonColors(
+                    onClick = {  },
+                    colors = ButtonDefaults.buttonColors(
                         CalmGreen
                     ),
                     shape = RoundedCornerShape(10.dp),
@@ -135,7 +136,7 @@ fun EmotionView() {
 fun Step1Box() {
     Box (
         modifier = Modifier
-            .background(color = Color(0xFF238A91), shape = RoundedCornerShape(size = 10.dp))
+            .background(color = Color(0xFF238A91), shape = RoundedCornerShape(size = 15.dp))
             .padding(20.dp)
     ) {
         Column (
@@ -172,7 +173,7 @@ fun Step1Box() {
 fun Step2Box() {
     Box (
         modifier = Modifier
-            .background(color = Color(0xFF238A91), shape = RoundedCornerShape(size = 10.dp))
+            .background(color = Color(0xFF238A91), shape = RoundedCornerShape(size = 15.dp))
             .padding(20.dp)
     ) {
         Column (
@@ -208,7 +209,7 @@ fun Step2Box() {
 fun Step3Box() {
     Box (
         modifier = Modifier
-            .background(color = Color(0xFF238A91), shape = RoundedCornerShape(size = 10.dp))
+            .background(color = Color(0xFF238A91), shape = RoundedCornerShape(size = 15.dp))
             .padding(20.dp)
     ) {
         Column (
