@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "440925353889",
+    "project_id": "mochi-feel",
+    "storage_bucket": "mochi-feel.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:440925353889:android:2f4ca6b041188a43697de0",
+        "android_client_info": {
+          "package_name": "com.example.mochi_feel"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0itTWrQ0nRpSZlvwcBwnFVs7m50PMjmQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

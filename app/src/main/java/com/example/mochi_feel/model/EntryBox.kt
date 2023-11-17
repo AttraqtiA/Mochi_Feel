@@ -12,8 +12,8 @@ data class EntryBox(
     val entry: String
 ) {
     @SuppressLint("SimpleDateFormat")
-    fun getYear():String{
-        val df = SimpleDateFormat("yyyy")
+    fun getEntryBoxDate():String{
+        val df = SimpleDateFormat("EEE, dd MMMM yyyy")
         return df.format(current_date)
     }
 }
