@@ -3,10 +3,12 @@ package com.example.mochi_feel.ui.screen.journalingEntry
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -38,7 +40,6 @@ import com.example.mochi_feel.model.Tag
 import com.example.mochi_feel.ui.theme.CalmGreen
 import com.example.mochi_feel.ui.theme.inter
 import com.example.mochi_feel.viewmodel.Journaling_Entry.HomeViewModel
-import java.util.Date
 
 @Composable
 fun HomeView(
@@ -49,7 +50,8 @@ fun HomeView(
     val context = LocalContext.current
 
     LazyColumn(
-        modifier = Modifier.padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier.fillMaxSize().padding(top = 24.dp, start = 24.dp, end = 14.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         item(content = {
             Row(
@@ -65,7 +67,7 @@ fun HomeView(
                         color = CalmGreen,
                     )
                     Text(
-                        text = "${variabel_UIState.current_date}",
+                        text = "${variabel_UIState.getCurrentDate()}",
                         fontSize = 16.sp,
                         lineHeight = 21.sp,
                         fontFamily = inter,
@@ -133,25 +135,38 @@ fun HomeView(
             )
 
             if (variabel_UIState.EntryBoxList.size == 0) {
-
+                ToAddEntryButton0()
             } else {
-
+                ToAddEntryButton1()
             }
         })
 
 
         items(variabel_UIState.EntryBoxList) { entrybox: EntryBox ->
-            OneEntryBox(entrybox.title, entrybox.time, entrybox.current_date, entrybox.tags_list, entrybox.entry)
+            OneEntryBox(
+                entrybox.title,
+                entrybox.time,
+                entrybox.getEntryBoxDate(),
+                entrybox.tags_list,
+                entrybox.entry
+            )
         }
     }
 }
 
 @Composable
-fun OneEntryBox(title: String, time: String, current_date: Date, tags_list: MutableList<Tag>, entry: String) {
+fun OneEntryBox(
+    title: String,
+    time: String,
+    current_date: String,
+    tags_list: MutableList<Tag>,
+    entry: String
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(color = CalmGreen, shape = RoundedCornerShape(size = 10.dp)),
+            .background(color = CalmGreen, shape = RoundedCornerShape(size = 10.dp))
+            .padding(16.dp)
     ) {
         Text(
             text = title,
@@ -159,7 +174,7 @@ fun OneEntryBox(title: String, time: String, current_date: Date, tags_list: Muta
             fontFamily = inter,
             fontWeight = FontWeight(600),
             color = Color(0xFFFFFFFF),
-            modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 4.dp)
+            modifier = Modifier.padding(bottom = 4.dp)
         )
         Text(
             text = "${time}, ${current_date}",
@@ -167,12 +182,11 @@ fun OneEntryBox(title: String, time: String, current_date: Date, tags_list: Muta
             fontFamily = inter,
             fontWeight = FontWeight(500),
             color = Color(0xFFFFFFFF),
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
+            modifier = Modifier.padding(bottom = 8.dp)
         )
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             for (tags in tags_list) {
@@ -202,7 +216,61 @@ fun OneEntryBox(title: String, time: String, current_date: Date, tags_list: Muta
                 fontWeight = FontWeight(500),
                 color = Color(0xFFFFFFFF),
             ),
-            modifier = Modifier.padding(top = 8.dp, start = 16.dp, end = 16.dp, bottom = 16.dp)
+            modifier = Modifier.padding(top = 8.dp)
+        )
+    }
+}
+
+@Composable
+fun ToAddEntryButton0() {
+    Row(
+        Modifier
+            .padding(bottom = 24.dp)
+            .background(color = Color(0xFF238A91), shape = RoundedCornerShape(size = 10.dp))
+    ) {
+        Text(
+            text = "+ Start writing your first entry",
+            style = TextStyle(
+                fontSize = 16.sp,
+                lineHeight = 21.sp,
+                fontFamily = inter,
+                fontWeight = FontWeight(600),
+                color = Color(0xFFFFFFFF),
+                textAlign = TextAlign.Center,
+            ),
+            modifier = Modifier
+                .padding(vertical = 8.dp, horizontal = 32.dp)
+        )
+    }
+}
+
+@Composable
+fun ToAddEntryButton1() {
+    Row(
+        Modifier
+            .padding(bottom = 24.dp)
+            .background(
+                color = Color.White,
+                shape = RoundedCornerShape(size = 10.dp)
+            )
+            .border(
+                width = 1.dp,
+                color = CalmGreen,
+                shape = RoundedCornerShape(size = 10.dp)
+            )
+    ) {
+        Text(
+            text = "+ Write another entry",
+            style = TextStyle(
+                fontSize = 16.sp,
+                lineHeight = 21.sp,
+                fontFamily = inter,
+                fontWeight = FontWeight(600),
+                color = Color(0xFF238A91),
+                textAlign = TextAlign.Center,
+            ),
+            modifier = Modifier
+                .padding(vertical = 8.dp, horizontal = 64.dp)
         )
     }
 }
