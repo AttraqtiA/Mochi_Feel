@@ -1,5 +1,6 @@
 package com.example.mochi_feel.data
 
+import android.util.Log
 import com.example.mochi_feel.util.Resource
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.AuthResult
@@ -35,51 +36,30 @@ class AuthRepositoryImpl @Inject constructor(
         name: String,
         birthDate: String
     ): Flow<Resource<AuthResult>> {
-        TODO("Not yet implemented")
+        return flow {
+            emit(Resource.Loading())
+            try {
+                val result = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
+                emit(Resource.Success(result))
+                val user = result.user
+                if (user != null) {
+                    val userData = hashMapOf(
+                        "username" to username,
+                        "name" to name,
+                        "birthDate" to birthDate,
+                        "email" to email,
+                    )
+                    firestore.collection("users").document(user.uid)
+                        .set(userData)
+                }
+            } catch (e: Exception) {
+                val errorMessage = e.message ?: "Unknown error"
+                emit(Resource.Error(errorMessage))
+                // Log the error for debugging purposes
+                Log.e("RegistrationError", errorMessage, e)
+            }
+        }
     }
-
-
-//    override fun registerUser(
-//        email: String,
-//        password: String,
-//        username: String,
-//        name: String,
-//        birthDate: String
-//    ): Flow<Resource<AuthResult>> {
-//        return flow {
-//            emit(Resource.Loading())
-//
-//            try {
-//                // Create a new user with email and password
-//                val authResult = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
-//                emit(Resource.Success(authResult))
-//
-//                // If user creation is successful, create a new Firestore document for the user
-//                val user = authResult.user
-//                if (user != null) {
-//                    val userData = hashMapOf(
-//                        "username" to username,
-//                        "name" to name,
-//                        "birthDate" to birthDate
-//                        // Add more fields as needed
-//                    )
-//
-//                    // Replace "users" with the desired collection name
-//                    firestore.collection("users").document(user.uid)
-//                        .set(userData)
-//                        .addOnFailureListener { e ->
-//                            emit(Resource.Error(e.message.toString()))
-//                        }
-//                }
-//            } catch (e: Exception) {
-//                // Handle registration failures
-//                emit(Resource.Error(e.message.toString()))
-//            }
-//        }.catch { e ->
-//            // Handle exceptions during Firestore operation
-//            emit(Resource.Error(e.message.toString()))
-//        }
-//    }
 
 
     override fun googleSignIn(credential: AuthCredential): Flow<Resource<AuthResult>> {
@@ -91,6 +71,4 @@ class AuthRepositoryImpl @Inject constructor(
             emit(Resource.Error(it.message.toString()))
         }
     }
-
-
 }
