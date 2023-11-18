@@ -20,6 +20,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,6 +34,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -67,6 +69,7 @@ fun SignUpView(
     viewModel: SignUpViewModel = hiltViewModel()
 ) {
     val scope = rememberCoroutineScope()
+//    val viewModel: SignUpViewModel = hiltViewModel()
 
     var username by rememberSaveable { mutableStateOf("") }
     var name by rememberSaveable { mutableStateOf("") }
@@ -75,6 +78,8 @@ fun SignUpView(
     var birth_year by rememberSaveable { mutableStateOf("") }
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
+
+    val state = viewModel.signUpState.collectAsState(initial = null)
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -414,6 +419,11 @@ fun SignUpView(
                     textAlign = TextAlign.Center,
                 )
             )
+        }
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+            if (state.value?.isLoading == true) {
+                CircularProgressIndicator()
+            }
         }
     }
 }
