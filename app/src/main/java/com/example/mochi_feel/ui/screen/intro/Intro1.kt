@@ -1,15 +1,20 @@
+@file:OptIn(ExperimentalFoundationApi::class)
+
 package com.example.mochi_feel.ui.screen.intro
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -28,18 +33,24 @@ import com.example.mochi_feel.R
 import com.example.mochi_feel.ui.theme.CalmGreen
 import com.example.mochi_feel.ui.theme.GreyDisable
 
+@ExperimentalFoundationApi
 @Composable
-fun ViewIntro1() {
+fun ViewIntro1(ButtonClicked: () -> Unit) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(12.dp, alignment = Alignment.CenterVertically)
+        modifier = Modifier
+            .padding(top = 80.dp)
+            .fillMaxSize()
     ) {
+        Row(modifier = Modifier.height(80.dp)) {
+            // White Space
+        }
         Image(
             painter = painterResource(id = R.drawable.intro1),
-            contentDescription = "intro 1",
+            contentDescription = "Intro",
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .padding(bottom = 36.dp)
+                .padding(bottom = 116.dp)
                 .width(208.04251.dp)
                 .height(176.86874.dp)
         )
@@ -48,7 +59,8 @@ fun ViewIntro1() {
             text = "Welcome to Mochi Feel",
             fontSize = 24.sp,
             color = CalmGreen,
-            fontWeight = FontWeight.ExtraBold
+            fontWeight = FontWeight.ExtraBold,
+            modifier = Modifier.padding(top = 24.dp, bottom = 16.dp)
         )
         Text(
             text = "Where Every Emotion Has a Story",
@@ -56,7 +68,7 @@ fun ViewIntro1() {
             color = CalmGreen,
         )
         Button(
-            onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(
+            onClick = ButtonClicked, colors = ButtonDefaults.buttonColors(
                 CalmGreen
             ), shape = RoundedCornerShape(10.dp), modifier = Modifier
                 .padding(top = 64.dp)
@@ -113,8 +125,9 @@ fun CircleProgress(introPage: Int) {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun PreviewIntro1() {
-    ViewIntro1()
+    ViewIntro1({})
 }
