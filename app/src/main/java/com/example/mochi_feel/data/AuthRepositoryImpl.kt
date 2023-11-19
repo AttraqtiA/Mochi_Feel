@@ -18,15 +18,33 @@ class AuthRepositoryImpl @Inject constructor(
 ) : AuthRepository {
 
     val firebaseFirestore = FirebaseFirestore.getInstance()
-    override fun loginUser(email: String, password: String): Flow<Resource<AuthResult>> {
+    override fun loginUser(username: String, password: String): Flow<Resource<AuthResult>> {
         return flow {
             emit(Resource.Loading())
-            val result = firebaseAuth.signInWithEmailAndPassword(email, password).await()
-            emit(Resource.Success(result))
+
+            // Assume you have a function to fetch the user's email from the user collection
+            val userEmail = getUserEmailByUsername(username)
+
+            // If the email is found, proceed with Firebase Authentication
+            if (userEmail != null) {
+                val result = firebaseAuth.signInWithEmailAndPassword(userEmail, password).await()
+                emit(Resource.Success(result))
+            } else {
+                emit(Resource.Error("User not found"))
+            }
         }.catch {
             emit(Resource.Error(it.message.toString()))
         }
+    }
 
+    private suspend fun getUserEmailByUsername(username: String): String? {
+        // Assume you have a Firestore query to fetch user data by username
+        val querySnapshot = firestore.collection("users")
+            .whereEqualTo("username", username)
+            .get()
+            .await()
+
+        return querySnapshot.documents.firstOrNull()?.getString("email")
     }
 
     override fun registerUser(

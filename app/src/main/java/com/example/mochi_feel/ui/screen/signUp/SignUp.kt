@@ -1,8 +1,10 @@
 package com.example.mochi_feel.ui.screen.signUp
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -46,27 +49,34 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.example.mochi_feel.R
 import com.example.mochi_feel.data.AuthRepository
+import com.example.mochi_feel.ui.MochiFeel_Screen
 import com.example.mochi_feel.ui.theme.inter
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUpView(
-    viewModel: SignUpViewModel = hiltViewModel()
+    viewModel: SignUpViewModel = hiltViewModel(),
+    navController: NavController
 ) {
     val scope = rememberCoroutineScope()
 //    val viewModel: SignUpViewModel = hiltViewModel()
@@ -79,6 +89,7 @@ fun SignUpView(
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
 
+    val context = LocalContext.current
     val state = viewModel.signUpState.collectAsState(initial = null)
 
     Column(
@@ -264,7 +275,7 @@ fun SignUpView(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 30.dp),
+                .padding(horizontal = 40.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             DateOutlinedTextField("Day", birth_day, { birth_day = it }, 1,31)
@@ -392,37 +403,92 @@ fun SignUpView(
             )
         )
         Row(
-            modifier = Modifier.padding(start = 10.dp, top = 10.dp, end = 10.dp, bottom = 10.dp)
+            modifier = Modifier.padding(start = 10.dp, top = 20.dp, bottom = 20.dp, end = 10.dp)
         ) {
-
-        }
-        TextButton(
-            onClick = {
-                scope.launch {
-                    viewModel.registerUser(email, password, username, name, birth_day, birth_month, birth_year)
-                }
-            },
-            modifier = Modifier
-                .width(325.dp)
-                .height(50.dp)
-                .background(color = Color(0xFF238A91), shape = RoundedCornerShape(size = 10.dp))
+            TextButton(
+                onClick = {
+                    scope.launch {
+                        viewModel.registerUser(email, password, username, name, birth_day, birth_month, birth_year)
+                    }
+                },
+                modifier = Modifier
+                    .width(325.dp)
+                    .height(50.dp)
+                    .background(color = Color(0xFF238A91), shape = RoundedCornerShape(size = 10.dp))
 //                .padding(start = 10.dp, top = 10.dp, end = 10.dp, bottom = 10.dp)
+            ) {
+                Text(
+                    text = "Sign Up",
+                    style = TextStyle(
+                        fontSize = 16.sp,
+                        lineHeight = 21.sp,
+                        fontFamily = inter,
+                        fontWeight = FontWeight(500),
+                        color = Color(0xFFFFFFFF),
+                        textAlign = TextAlign.Center,
+                    )
+                )
+            }
+        }
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+            if (state.value?.isLoading == true) {
+                CircularProgressIndicator()
+            }
+        }
+        val text = buildAnnotatedString {
+            withStyle(style = SpanStyle(fontWeight = FontWeight.Normal, color = Color(0xFF238A91))) {
+                append("Already have an account? ")
+            }
+            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold, color = Color(0xFF238A91))) {
+                append("Sign In")
+                // Add click event here, for example, on click navigate to sign-in screen
+                addStringAnnotation(
+                    tag = "SignIn",
+                    annotation = "ClickSignIn",
+                    start = length - "Sign In".length,
+                    end = length
+                )
+            }
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp), // Adjust horizontal padding as needed
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start
         ) {
             Text(
-                text = "Sign Up",
+                text = text,
                 style = TextStyle(
                     fontSize = 16.sp,
                     lineHeight = 21.sp,
                     fontFamily = inter,
                     fontWeight = FontWeight(500),
-                    color = Color(0xFFFFFFFF),
-                    textAlign = TextAlign.Center,
+                    color = Color(0xFF238A91),
+                ),
+                modifier = Modifier.padding(
+                    start = 20.dp,
+                    end = 10.dp,
                 )
+                    .clickable {
+                        navController.navigate(MochiFeel_Screen.Login.name)
+                    }
             )
         }
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-            if (state.value?.isLoading == true) {
-                CircularProgressIndicator()
+    }
+    LaunchedEffect(key1 = state.value?.isSuccess) {
+        scope.launch {
+            if (state.value?.isSuccess?.isNotEmpty() == true) {
+                val success = state.value?.isSuccess
+                Toast.makeText(context, "$success", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+    LaunchedEffect(key1 = state.value?.isError) {
+        scope.launch {
+            if (state.value?.isError?.isNotBlank() == true) {
+                val error = state.value?.isError
+                Toast.makeText(context, "$error", Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -520,8 +586,7 @@ fun DateOutlinedTextField(
 
 
 //@Preview(showSystemUi = true, showBackground = true)
-//@Composable
-//fun SignUpPreview() {
-//    val viewModel: SignUpViewModel = hiltViewModel()
-//    SignUpView(viewModel)
-//}
+////@Composable
+////fun SignUpPreview() {
+////    SignUpView()
+////}
