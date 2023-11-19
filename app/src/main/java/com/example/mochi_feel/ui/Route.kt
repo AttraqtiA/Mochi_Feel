@@ -5,6 +5,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.ExperimentalFoundationApi
+import LoginView
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -35,6 +36,8 @@ import com.example.mochi_feel.R
 import com.example.mochi_feel.ui.screen.intro.ViewIntro1
 import com.example.mochi_feel.ui.screen.intro.ViewIntro2
 import com.example.mochi_feel.ui.screen.intro.ViewIntro3
+import com.example.mochi_feel.ui.screen.music.MusicView
+import com.example.mochi_feel.ui.screen.signUp.SignUpView
 import com.example.mochi_feel.ui.theme.CalmGreen
 
 enum class MochiFeel_Screen() {
@@ -127,7 +130,7 @@ fun MochiFeelRoute() {
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = MochiFeel_Screen.Intro1.name,
+            startDestination = MochiFeel_Screen.SignUp.name,
             modifier = Modifier.padding(innerPadding)
         ) {
             // @Jason
@@ -152,11 +155,17 @@ fun MochiFeelRoute() {
 
             // @Christian
             composable(MochiFeel_Screen.Login.name) {
+                LoginView(
+                    navController = navController
+                )
             }
             composable(MochiFeel_Screen.SignUp.name) {
+                SignUpView(
+                    navController = navController
+                )
             }
             composable(MochiFeel_Screen.Music.name) {
-
+                MusicView()
             }
             // @EndChristian
 
