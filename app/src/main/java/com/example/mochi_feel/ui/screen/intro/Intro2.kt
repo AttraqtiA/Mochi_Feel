@@ -3,6 +3,8 @@ package com.example.mochi_feel.ui.screen.intro
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -24,10 +26,13 @@ import com.example.mochi_feel.R
 import com.example.mochi_feel.ui.theme.CalmGreen
 
 @Composable
-fun ViewIntro2() {
+fun ViewIntro2(ButtonClicked: () -> Unit) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(12.dp, alignment = Alignment.CenterVertically)
+        modifier = Modifier
+            .padding(top = 80.dp)
+            .fillMaxSize()
+            .fillMaxWidth()
     ) {
         Text(
             text = "Mochi Feel",
@@ -40,8 +45,8 @@ fun ViewIntro2() {
             contentDescription = "intro 2",
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .padding(bottom = 36.dp, top = 80.dp)
-                .width(260.dp)
+                .padding(bottom = 50.dp, top = 64.dp)
+                .width(280.dp)
                 .height(220.dp)
         )
         CircleProgress(introPage = 2)
@@ -49,7 +54,8 @@ fun ViewIntro2() {
             text = "Journal Everyday",
             fontSize = 24.sp,
             color = CalmGreen,
-            fontWeight = FontWeight.ExtraBold
+            fontWeight = FontWeight.ExtraBold,
+            modifier = Modifier.padding(top = 24.dp, bottom = 16.dp)
         )
         Text(
             text = "Got a lot of thoughts? Write then down.",
@@ -57,7 +63,7 @@ fun ViewIntro2() {
             color = CalmGreen,
         )
         Button(
-            onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(
+            onClick = ButtonClicked, colors = ButtonDefaults.buttonColors(
                 CalmGreen
             ), shape = RoundedCornerShape(10.dp), modifier = Modifier
                 .padding(top = 64.dp)
@@ -78,5 +84,5 @@ fun ViewIntro2() {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun PreviewIntro2() {
-    ViewIntro2()
+    ViewIntro2({})
 }
