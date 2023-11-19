@@ -24,14 +24,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mochi_feel.R
+import com.example.mochi_feel.model.Achievement
 import com.example.mochi_feel.ui.theme.CalmGreen
 import com.example.mochi_feel.ui.theme.CalmGreenLight
 import com.example.mochi_feel.ui.theme.inter
@@ -137,55 +141,78 @@ fun ViewProfile(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-//                StatisticsTitle("Your Entry Journey 2023")
-//
-//                Image(
-//                    painter = painterResource(id = R.drawable.statistic_dummy),
-//                    contentDescription = "Statistics",
-//                    modifier = Modifier
-//                        .width(320.dp)
-//                        .height(200.dp)
-//                )
-//                Text(
-//                    text = buildAnnotatedString {
-//                        append("You averaged ")
-//                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp)) {
-//                            append("33")
-//                        }
-//                        append(" entries a month,\nand peaked on ")
-//                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp)) {
-//                            append("September")
-//                        }
-//                        append(" with ")
-//                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp)) {
-//                            append("48")
-//                        }
-//                        append(" entries.\nYour total entry on 2023 is ")
-//                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp)) {
-//                            append("321")
-//                        }
-//                        append(", way to go!")
-//                    },
-//                    style = TextStyle(
-//                        fontSize = 12.sp,
-//                        lineHeight = 21.sp,
-//                        fontFamily = inter,
-//                        fontWeight = FontWeight(400),
-//                        color = CalmGreen,
-//                    )
-//                )
-//
-//                StatisticsTitle("Your Top 3 Categories", Modifier.padding(top = 16.dp))
-//
-//                Row(
-//                    modifier = Modifier.fillMaxWidth(),
-//                    horizontalArrangement = Arrangement.Center,
-//                    verticalAlignment = Alignment.Bottom
-//                ) {
-//                    OneCategory("late night", 98)
-//                    OneCategory("brain fart", 130)
-//                    OneCategory("rants", 56)
-//                }
+                StatisticsTitle("Your Entry Journey 2023")
+
+                Image(
+                    painter = painterResource(id = R.drawable.statistic_dummy),
+                    contentDescription = "Statistics",
+                    modifier = Modifier
+                        .width(320.dp)
+                        .height(200.dp)
+                )
+                Text(
+                    text = buildAnnotatedString {
+                        append("You averaged ")
+                        withStyle(
+                            style = SpanStyle(
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 16.sp
+                            )
+                        ) {
+                            append("${variabel_UIState.averageEntries}")
+                        }
+                        append(" entries a month,\nand peaked on ")
+                        withStyle(
+                            style = SpanStyle(
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 16.sp
+                            )
+                        ) {
+                            append(variabel_UIState.peakMonth)
+                        }
+                        append(" with ")
+                        withStyle(
+                            style = SpanStyle(
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 16.sp
+                            )
+                        ) {
+                            append("${variabel_UIState.peakEntries}")
+                        }
+                        append(" entries.\nYour total entry on 2023 is ")
+                        withStyle(
+                            style = SpanStyle(
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 16.sp
+                            )
+                        ) {
+                            append("${variabel_UIState.totalEntry2023}")
+                        }
+                        append(", way to go!")
+                    },
+                    style = TextStyle(
+                        fontSize = 12.sp,
+                        lineHeight = 21.sp,
+                        fontFamily = inter,
+                        fontWeight = FontWeight(400),
+                        color = CalmGreen,
+                    )
+                )
+
+                StatisticsTitle("Your Top 3 Categories", Modifier.padding(top = 16.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.Bottom
+                ) {
+                    for (a in 0 until 3) {
+                        OneCategory(
+                            variabel_UIState.Top3Categories_name.get(a),
+                            variabel_UIState.Top3Categories_entries.get(a)
+                        )
+                    }
+                }
 
                 StatisticsTitle("Your Streak Statistics", Modifier.padding(top = 16.dp))
 
@@ -193,14 +220,119 @@ fun ViewProfile(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
-                    OneStatisticBox()
-                    OneStatisticBox()
-                    OneStatisticBox()
+                    OneStatisticBox("Total Entries", variabel_UIState.TotalEntries)
+                    OneStatisticBox("Current Streak", variabel_UIState.currentStreak)
+                    OneStatisticBox("Longest Streak", variabel_UIState.longestStreak)
+                }
+
+                StatisticsTitle("Your Achievements & Badges", Modifier.padding(top = 16.dp))
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    for (achievements in variabel_UIState.Achievement_List) {
+                        OneAchievementBox(achievementToDisplay = achievements)
+                    }
                 }
             }
 
         })
 
+    }
+}
+
+@Composable
+fun OneAchievementBox(achievementToDisplay: Achievement) {
+    Column(
+        Modifier
+            .background(
+                color = Color(0xFF238A91),
+                shape = RoundedCornerShape(10.dp)
+            )
+            .padding(8.dp),
+
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Image(
+            painter = painterResource(id = achievementToDisplay.image_path),
+            contentDescription = "Badges",
+            modifier = Modifier.size(80.dp)
+        )
+        Text(
+            text = achievementToDisplay.name,
+            style = TextStyle(
+                fontSize = 10.sp,
+                lineHeight = 21.sp,
+                fontFamily = inter,
+                fontWeight = FontWeight(700),
+                color = Color(0xFFFFFFFF),
+            )
+        )
+    }
+}
+
+@Composable
+fun OneStatisticBox(streakName: String, dataToDisplay: Int) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.border(
+            width = 1.dp,
+            color = CalmGreen,
+            shape = RoundedCornerShape(size = 10.dp)
+        )
+    ) {
+        Row(
+            Modifier
+                .background(
+                    color = Color(0xFF238A91),
+                    shape = RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp)
+                )
+                .padding(start = 5.dp, top = 5.dp, end = 5.dp, bottom = 5.dp)
+        ) {
+            Text(
+                text = streakName,
+                style = TextStyle(
+                    fontSize = 12.sp,
+                    lineHeight = 21.sp,
+                    fontFamily = inter,
+                    fontWeight = FontWeight(600),
+                    color = Color(0xFFFFFFFF),
+                    textAlign = TextAlign.Center,
+                ),
+                modifier = Modifier.padding(4.dp)
+            )
+        }
+        Column(
+            modifier = Modifier.padding(bottom = 5.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "${dataToDisplay}",
+                style = TextStyle(
+                    fontSize = 24.sp,
+                    lineHeight = 21.sp,
+                    fontFamily = inter,
+                    fontWeight = FontWeight(600),
+                    color = Color(0xFF238A91),
+                    textAlign = TextAlign.Center,
+                )
+            )
+            Text(
+                text = "days",
+                style = TextStyle(
+                    fontSize = 12.sp,
+                    lineHeight = 21.sp,
+                    fontFamily = inter,
+                    fontWeight = FontWeight(600),
+                    color = Color(0xFF238A91),
+                )
+            )
+
+        }
     }
 }
 
@@ -290,68 +422,6 @@ fun OneCategory(category_name: String, category_count: Int) {
     }
 }
 
-@Composable
-fun OneStatisticBox() {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.border(
-            width = 1.dp,
-            color = CalmGreen,
-            shape = RoundedCornerShape(size = 10.dp)
-        )
-    ) {
-        Row(
-            Modifier
-                .fillMaxWidth()
-                .background(color = Color(0xFF238A91), shape = RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp))
-                .padding(start = 5.dp, top = 5.dp, end = 5.dp, bottom = 5.dp)
-        ) {
-            Text(
-                text = "Total Entries",
-                style = TextStyle(
-                    fontSize = 12.sp,
-                    lineHeight = 21.sp,
-                    fontFamily = inter,
-                    fontWeight = FontWeight(600),
-                    color = Color(0xFFFFFFFF),
-                    textAlign = TextAlign.Center,
-                )
-            )
-        }
-        Row(
-            modifier = Modifier.fillMaxWidth()
-
-        ) {
-            Column() {
-                Text(
-                    text = "503",
-                    style = TextStyle(
-                        fontSize = 24.sp,
-                        lineHeight = 21.sp,
-                        fontFamily = inter,
-                        fontWeight = FontWeight(600),
-                        color = Color(0xFF238A91),
-                        textAlign = TextAlign.Center,
-                    )
-                )
-                Text(
-                    text = "days",
-                    style = TextStyle(
-                        fontSize = 12.sp,
-                        lineHeight = 21.sp,
-                        fontFamily = inter,
-                        fontWeight = FontWeight(600),
-                        color = Color(0xFF238A91),
-                    )
-                )
-            }
-            Image(
-                painter = painterResource(id = R.drawable.profilepage),
-                contentDescription = "Mochi Wow",
-            )
-        }
-    }
-}
 
 @Preview(showSystemUi = true, showBackground = true)
 @Composable

@@ -25,8 +25,8 @@ class ProfileViewModel : ViewModel() {
 
             mutableListOf(
                 Achievement("1 Year User", R.drawable.achievements_1),
-                Achievement("500 Entries Written", R.drawable.achievements_2),
-                Achievement("Have Over 100+ Tags", R.drawable.achievements_3)
+                Achievement("500 Entries", R.drawable.achievements_2),
+                Achievement("Have 100+ Tags", R.drawable.achievements_3)
             )
         )
     )
