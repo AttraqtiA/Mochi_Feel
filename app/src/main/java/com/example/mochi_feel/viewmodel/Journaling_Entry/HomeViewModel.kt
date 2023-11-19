@@ -16,6 +16,16 @@ class HomeViewModel : ViewModel() {
             SimpleDateFormat("yyyy-MM-dd").parse("2023-11-23")!!,
             15,
             mutableListOf(
+                SimpleDateFormat("yyyy-MM-dd").parse("2023-11-19")!!,
+                SimpleDateFormat("yyyy-MM-dd").parse("2023-11-20")!!,
+                SimpleDateFormat("yyyy-MM-dd").parse("2023-11-21")!!,
+                SimpleDateFormat("yyyy-MM-dd").parse("2023-11-22")!!,
+                SimpleDateFormat("yyyy-MM-dd").parse("2023-11-23")!!,
+                SimpleDateFormat("yyyy-MM-dd").parse("2023-11-24")!!,
+                SimpleDateFormat("yyyy-MM-dd").parse("2023-11-25")!!,
+            ),
+
+            mutableListOf(
                 EntryBox(
                     "Cake for breakfast",
                     "08.20",

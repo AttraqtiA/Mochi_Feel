@@ -50,7 +50,9 @@ fun HomeView(
     val context = LocalContext.current
 
     LazyColumn(
-        modifier = Modifier.fillMaxSize().padding(top = 24.dp, start = 24.dp, end = 14.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 24.dp, start = 24.dp, end = 14.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         item(content = {
@@ -126,6 +128,25 @@ fun HomeView(
                 )
             }
 
+        })
+
+
+        item(content = {
+            Row(
+                modifier = Modifier.fillMaxWidth()
+                    .padding(top = 16.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                for (onedate in variabel_UIState.FormattedCalendarDisplay()) {
+                    if (onedate.date_number.toInt() < variabel_UIState.CurrentDateChecker().toInt()) {
+                        OneDatePast(onedate.day_name, onedate.date_number)
+                    } else if (onedate.date_number.toInt() == variabel_UIState.CurrentDateChecker().toInt()) {
+                        OneDateActive(onedate.day_name, onedate.date_number)
+                    } else {
+                        OneDateFuture(onedate.day_name, onedate.date_number)
+                    }
+                }
+            }
             Divider(
                 color = CalmGreen,
                 modifier = Modifier
@@ -154,6 +175,104 @@ fun HomeView(
     }
 }
 
+@Composable
+fun OneDateActive(day_name: String, date_number: String) {
+    Column(
+        Modifier
+            .width(32.dp)
+            .height(48.dp)
+            .background(color = Color(0xFF238A91), shape = RoundedCornerShape(size = 5.dp)),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = "Thu",
+            style = TextStyle(
+                fontSize = 12.sp,
+                lineHeight = 21.sp,
+                fontFamily = inter,
+                fontWeight = FontWeight(700),
+                color = Color(0xFFFFFFFF),
+                textAlign = TextAlign.Center,
+            )
+        )
+        Text(
+            text = "12",
+            style = TextStyle(
+                fontSize = 16.sp,
+                lineHeight = 21.sp,
+                fontFamily = inter,
+                fontWeight = FontWeight(700),
+                color = Color(0xFFFFFFFF),
+                textAlign = TextAlign.Center,
+            )
+        )
+    }
+}
+
+@Composable
+fun OneDatePast(day_name: String, date_number: String) {
+    Column(
+        Modifier
+            .width(32.dp)
+            .height(48.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = "Wed",
+            style = TextStyle(
+                fontSize = 12.sp,
+                lineHeight = 21.sp,
+                fontFamily = inter,
+                fontWeight = FontWeight(300),
+                color = Color(0xFF238A91),
+            )
+        )
+        Text(
+            text = "11",
+            style = TextStyle(
+                fontSize = 16.sp,
+                lineHeight = 21.sp,
+                fontFamily = inter,
+                fontWeight = FontWeight(500),
+                color = Color(0xFF238A91),
+            )
+        )
+    }
+}
+
+@Composable
+fun OneDateFuture(day_name: String, date_number: String) {
+    Column(
+        Modifier
+            .width(32.dp)
+            .height(48.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = "Fri",
+            style = TextStyle(
+                fontSize = 12.sp,
+                lineHeight = 21.sp,
+                fontFamily = inter,
+                fontWeight = FontWeight(300),
+                color = Color(0x4D000000),
+            )
+        )
+        Text(
+            text = "13",
+            style = TextStyle(
+                fontSize = 16.sp,
+                lineHeight = 21.sp,
+                fontFamily = inter,
+                fontWeight = FontWeight(500),
+                color = Color(0x4D000000),
+            )
+        )
+    }
+}
 @Composable
 fun ToAddEntryButton0() {
     Row(
@@ -208,10 +327,8 @@ fun ToAddEntryButton1() {
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+@Preview(showBackground = true, showSystemUi = false)
 @Composable
 fun HomePreview() {
-//    val Tags: MutableList<Tag> = mutableListOf(Tag(name = "lost hope"), Tag(name = "tired of life"))
-//    EntryBox(Tags)
     HomeView()
 }
