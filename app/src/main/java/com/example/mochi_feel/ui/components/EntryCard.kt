@@ -1,4 +1,4 @@
-package com.example.mochi_feel.ui.screen.components
+package com.example.mochi_feel.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -20,7 +20,7 @@ import com.example.mochi_feel.ui.theme.CalmGreen
 import com.example.mochi_feel.ui.theme.inter
 
 @Composable
-fun OneEntryBox(
+fun EntryCard(
     title: String,
     time: String,
     current_date: String,
@@ -72,6 +72,7 @@ fun OneEntryBox(
                 }
             }
         }
+
         Text(
             text = entry,
             style = TextStyle(

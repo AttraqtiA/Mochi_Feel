@@ -20,11 +20,10 @@ import com.example.mochi_feel.ui.theme.CalmGreen
 import com.example.mochi_feel.ui.theme.inter
 
 @Composable
-fun OneEntryBox(
+fun OneEntryBoxDemo(
     title: String,
     time: String,
     current_date: String,
-    tags_list: MutableList<Tag>,
     entry: String
 ) {
     Column(
@@ -54,7 +53,6 @@ fun OneEntryBox(
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            for (tags in tags_list) {
                 Row(
                     Modifier
                         .background(
@@ -63,7 +61,7 @@ fun OneEntryBox(
                         .padding(start = 5.dp, top = 2.dp, end = 5.dp, bottom = 2.dp)
                 ) {
                     Text(
-                        text = tags.name,
+                        text = "tag 1",
                         fontSize = 8.sp,
                         fontFamily = inter,
                         fontWeight = FontWeight(700),
@@ -71,7 +69,7 @@ fun OneEntryBox(
                     )
                 }
             }
-        }
+
         Text(
             text = entry,
             style = TextStyle(
@@ -82,5 +80,5 @@ fun OneEntryBox(
             ),
             modifier = Modifier.padding(top = 8.dp)
         )
+        }
     }
-}
