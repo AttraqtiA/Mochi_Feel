@@ -45,10 +45,11 @@ import com.example.mochi_feel.ui.theme.inter
 
 @Composable
 fun ViewProfile(
+    toSettings: () -> Unit,
+
     profileViewModel: ProfileViewModel = viewModel()
 ) {
     val variabel_UIState by profileViewModel.uiState.collectAsState()
-
 
     LazyColumn(
         modifier = Modifier
@@ -92,9 +93,9 @@ fun ViewProfile(
                         contentDescription = "Settings icon",
                         tint = Color.White,
                         modifier = Modifier
-                            .clickable(onClick = {
-
-                            })
+                            .clickable(
+                                onClick = toSettings
+                            )
                             .size(32.dp)
                     )
                 }
@@ -426,5 +427,5 @@ fun OneCategory(category_name: String, category_count: Int) {
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun PreviewProfile() {
-    ViewProfile()
+    ViewProfile({})
 }

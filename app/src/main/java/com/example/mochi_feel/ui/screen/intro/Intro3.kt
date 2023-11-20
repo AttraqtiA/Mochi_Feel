@@ -1,7 +1,7 @@
 package com.example.mochi_feel.ui.screen.intro
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,8 +16,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,15 +28,19 @@ import androidx.compose.ui.unit.sp
 import com.example.mochi_feel.R
 import com.example.mochi_feel.ui.theme.CalmGreen
 import com.example.mochi_feel.ui.theme.GreyDisable
+import com.example.mochi_feel.ui.theme.inter
 
 @Composable
 fun ViewIntro3(LoginClicked: () -> Unit, RegisterClicked: () -> Unit) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
+            .background(color = Color.White)
             .fillMaxSize()
             .fillMaxWidth()
             .padding(top = 80.dp)
+
+
     ) {
         Text(
             text = "Mochi Feel",
@@ -80,7 +86,17 @@ fun ViewIntro3(LoginClicked: () -> Unit, RegisterClicked: () -> Unit) {
                 .height(40.dp)
 
         ) {
-            Text(text = "Login")
+            Text(
+                text = "Login",
+                style = TextStyle(
+                    fontSize = 16.sp,
+                    lineHeight = 21.sp,
+                    fontFamily = inter,
+                    fontWeight = FontWeight(700),
+                    color = Color(0xFFFFFFFF),
+                    textAlign = TextAlign.Center,
+                )
+            )
         }
         Button(
             onClick = RegisterClicked, colors = ButtonDefaults.buttonColors(
@@ -97,7 +113,17 @@ fun ViewIntro3(LoginClicked: () -> Unit, RegisterClicked: () -> Unit) {
                 .height(40.dp)
 
         ) {
-            Text(text = "Register")
+            Text(
+                text = "Register",
+                style = TextStyle(
+                    fontSize = 16.sp,
+                    lineHeight = 21.sp,
+                    fontFamily = inter,
+                    fontWeight = FontWeight(700),
+                    color = Color(0xFF238A91),
+                    textAlign = TextAlign.Center,
+                )
+            )
         }
     }
 }

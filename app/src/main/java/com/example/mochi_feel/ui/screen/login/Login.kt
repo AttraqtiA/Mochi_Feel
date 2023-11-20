@@ -1,4 +1,4 @@
-import android.widget.DatePicker
+
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -23,7 +23,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -45,18 +44,14 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.mochi_feel.R
-import com.example.mochi_feel.model.Calendar
-import com.example.mochi_feel.model.UserManager
 import com.example.mochi_feel.ui.MochiFeel_Screen
 import com.example.mochi_feel.ui.screen.login.LoginViewModel
 import com.example.mochi_feel.ui.theme.inter
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -94,7 +89,8 @@ fun LoginView(
     val state = viewModel.signInState.collectAsState(initial = null)
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize()
+            .background(color = Color.White),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -285,6 +281,7 @@ fun LoginView(
                     scope.launch {
                         viewModel.loginUser(username, password)
                     }
+                    navController.navigate(MochiFeel_Screen.Home.name)
                 },
                 modifier = Modifier
                     .width(325.dp)

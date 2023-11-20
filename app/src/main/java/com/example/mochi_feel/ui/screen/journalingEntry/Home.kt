@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,6 +25,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -43,6 +46,8 @@ import com.example.mochi_feel.viewmodel.Journaling_Entry.HomeViewModel
 
 @Composable
 fun HomeView(
+    ClickToAddEntry: () -> Unit,
+
     homeViewModel: HomeViewModel = viewModel()
 ) {
     val variabel_UIState by homeViewModel.uiState.collectAsState()
@@ -52,7 +57,8 @@ fun HomeView(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 24.dp, start = 24.dp, end = 14.dp),
+            .background(color = Color.White)
+            .padding(top = 24.dp, start = 24.dp, end = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         item(content = {
@@ -119,7 +125,7 @@ fun HomeView(
                 }
 
                 Text(
-                    text = "You currently have a journal streak of ${variabel_UIState.streak} days! Keep it up :D",
+                    text = "You currently have a journal streak of ${variabel_UIState.streak} days! Keep it up!",
                     fontSize = 16.sp,
                     lineHeight = 21.sp,
                     fontFamily = inter,
@@ -133,14 +139,19 @@ fun HomeView(
 
         item(content = {
             Row(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(top = 16.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 for (onedate in variabel_UIState.FormattedCalendarDisplay()) {
-                    if (onedate.date_number.toInt() < variabel_UIState.CurrentDateChecker().toInt()) {
+                    if (onedate.date_number.toInt() < variabel_UIState.CurrentDateChecker()
+                            .toInt()
+                    ) {
                         OneDatePast(onedate.day_name, onedate.date_number)
-                    } else if (onedate.date_number.toInt() == variabel_UIState.CurrentDateChecker().toInt()) {
+                    } else if (onedate.date_number.toInt() == variabel_UIState.CurrentDateChecker()
+                            .toInt()
+                    ) {
                         OneDateActive(onedate.day_name, onedate.date_number)
                     } else {
                         OneDateFuture(onedate.day_name, onedate.date_number)
@@ -156,9 +167,9 @@ fun HomeView(
             )
 
             if (variabel_UIState.EntryBoxList.size == 0) {
-                ToAddEntryButton0()
+                ToAddEntryButton0(ClickToAddEntry)
             } else {
-                ToAddEntryButton1()
+                ToAddEntryButton1(ClickToAddEntry)
             }
         })
 
@@ -186,7 +197,7 @@ fun OneDateActive(day_name: String, date_number: String) {
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "Thu",
+            text = day_name,
             style = TextStyle(
                 fontSize = 12.sp,
                 lineHeight = 21.sp,
@@ -197,7 +208,7 @@ fun OneDateActive(day_name: String, date_number: String) {
             )
         )
         Text(
-            text = "12",
+            text = date_number,
             style = TextStyle(
                 fontSize = 16.sp,
                 lineHeight = 21.sp,
@@ -220,7 +231,7 @@ fun OneDatePast(day_name: String, date_number: String) {
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "Wed",
+            text = day_name,
             style = TextStyle(
                 fontSize = 12.sp,
                 lineHeight = 21.sp,
@@ -230,7 +241,7 @@ fun OneDatePast(day_name: String, date_number: String) {
             )
         )
         Text(
-            text = "11",
+            text = date_number,
             style = TextStyle(
                 fontSize = 16.sp,
                 lineHeight = 21.sp,
@@ -252,7 +263,7 @@ fun OneDateFuture(day_name: String, date_number: String) {
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "Fri",
+            text = day_name,
             style = TextStyle(
                 fontSize = 12.sp,
                 lineHeight = 21.sp,
@@ -262,7 +273,7 @@ fun OneDateFuture(day_name: String, date_number: String) {
             )
         )
         Text(
-            text = "13",
+            text = date_number,
             style = TextStyle(
                 fontSize = 16.sp,
                 lineHeight = 21.sp,
@@ -273,12 +284,21 @@ fun OneDateFuture(day_name: String, date_number: String) {
         )
     }
 }
+
 @Composable
-fun ToAddEntryButton0() {
-    Row(
-        Modifier
+fun ToAddEntryButton0(ClickToAddEntry: () -> Unit) {
+    Button(
+        onClick = ClickToAddEntry,
+        colors = ButtonDefaults.buttonColors(
+            CalmGreen
+        ), shape = RoundedCornerShape(10.dp),
+        modifier = Modifier
             .padding(bottom = 24.dp)
-            .background(color = Color(0xFF238A91), shape = RoundedCornerShape(size = 10.dp))
+            .shadow(
+                elevation = 4.dp,
+                spotColor = CalmGreen,
+                shape = RoundedCornerShape(10.dp)
+            )
     ) {
         Text(
             text = "+ Start writing your first entry",
@@ -291,19 +311,24 @@ fun ToAddEntryButton0() {
                 textAlign = TextAlign.Center,
             ),
             modifier = Modifier
-                .padding(vertical = 8.dp, horizontal = 32.dp)
+                .padding(vertical = 4.dp)
         )
     }
 }
 
 @Composable
-fun ToAddEntryButton1() {
-    Row(
-        Modifier
+fun ToAddEntryButton1(ClickToAddEntry: () -> Unit) {
+    Button(
+        onClick = ClickToAddEntry,
+        colors = ButtonDefaults.buttonColors(
+            Color.White
+        ), shape = RoundedCornerShape(10.dp),
+        modifier = Modifier
             .padding(bottom = 24.dp)
-            .background(
-                color = Color.White,
-                shape = RoundedCornerShape(size = 10.dp)
+            .shadow(
+                elevation = 4.dp,
+                spotColor = CalmGreen,
+                shape = RoundedCornerShape(10.dp)
             )
             .border(
                 width = 1.dp,
@@ -322,7 +347,7 @@ fun ToAddEntryButton1() {
                 textAlign = TextAlign.Center,
             ),
             modifier = Modifier
-                .padding(vertical = 8.dp, horizontal = 64.dp)
+                .padding(horizontal = 32.dp)
         )
     }
 }
@@ -330,5 +355,5 @@ fun ToAddEntryButton1() {
 @Preview(showBackground = true, showSystemUi = false)
 @Composable
 fun HomePreview() {
-    HomeView()
+    HomeView({})
 }

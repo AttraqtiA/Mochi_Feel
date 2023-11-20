@@ -1,11 +1,7 @@
 package com.example.mochi_feel.ui
 
-import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.foundation.ExperimentalFoundationApi
 import LoginView
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -13,7 +9,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -36,8 +31,10 @@ import com.example.mochi_feel.R
 import com.example.mochi_feel.ui.screen.intro.ViewIntro1
 import com.example.mochi_feel.ui.screen.intro.ViewIntro2
 import com.example.mochi_feel.ui.screen.intro.ViewIntro3
+import com.example.mochi_feel.ui.screen.journalingEntry.HomeView
 import com.example.mochi_feel.ui.screen.music.MusicView
 import com.example.mochi_feel.ui.screen.signUp.SignUpView
+import com.example.mochi_feel.ui.screen.statisticsProfile.ViewProfile
 import com.example.mochi_feel.ui.theme.CalmGreen
 
 enum class MochiFeel_Screen() {
@@ -51,22 +48,15 @@ enum class MochiFeel_Screen() {
     NewEntry,
     Music,
     Profile,
+    Settings
 }
 
 sealed class BottomNavItem(var title: String, var icon: Int, var route: String) {
     object Home : BottomNavItem("Home", R.drawable.inscription, MochiFeel_Screen.Home.name)
-    object Search :
-        BottomNavItem("Search", R.drawable.baseline_search_24, MochiFeel_Screen.Search.name)
-
-    object AddEntry :
-        BottomNavItem("AddEntry", R.drawable.create_entry_icon, MochiFeel_Screen.NewEntry.name)
-
+    object Search : BottomNavItem("Search", R.drawable.baseline_search_24, MochiFeel_Screen.Search.name)
+    object AddEntry : BottomNavItem("AddEntry", R.drawable.create_entry_icon, MochiFeel_Screen.NewEntry.name)
     object Music : BottomNavItem("Music", R.drawable.music, MochiFeel_Screen.Music.name)
-    object Profile : BottomNavItem(
-        "Profile",
-        R.drawable.baseline_account_circle_24,
-        MochiFeel_Screen.Profile.name
-    )
+    object Profile : BottomNavItem("Profile", R.drawable.baseline_account_circle_24, MochiFeel_Screen.Profile.name)
 }
 
 @Composable
@@ -92,9 +82,6 @@ fun BottomNavBarMF(navController: NavController) {
                         painter = painterResource(id = item.icon),
                         contentDescription = item.title
                     )
-                },
-                label = {
-                    Text(text = item.title)
                 },
                 selected = currentDestination?.hierarchy?.any { it.route == item.route } == true,
                 onClick = {
@@ -131,23 +118,26 @@ fun MochiFeelRoute() {
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = MochiFeel_Screen.SignUp.name,
+            startDestination = MochiFeel_Screen.Intro1.name,
             modifier = Modifier.padding(innerPadding)
         ) {
             // @Jason
             composable(
                 MochiFeel_Screen.Intro1.name,
             ) {
+                canNavigateBack = false
                 ViewIntro1({ navController.navigate(MochiFeel_Screen.Intro2.name) })
             }
             composable(
                 MochiFeel_Screen.Intro2.name,
             ) {
+                canNavigateBack = false
                 ViewIntro2 { navController.navigate(MochiFeel_Screen.Intro3.name) }
             }
             composable(
                 MochiFeel_Screen.Intro3.name
             ) {
+                canNavigateBack = false
                 ViewIntro3(
                     { navController.navigate(MochiFeel_Screen.Login.name) },
                     { navController.navigate(MochiFeel_Screen.SignUp.name) })
@@ -168,9 +158,28 @@ fun MochiFeelRoute() {
                 )
             }
             composable(MochiFeel_Screen.Music.name) {
+                canNavigateBack = true
                 MusicView()
             }
             // @EndChristian
+
+            // @Samuel
+            composable(MochiFeel_Screen.Home.name) {
+                canNavigateBack = true
+                HomeView(
+                    { navController.navigate(MochiFeel_Screen.NewEntry.name) }
+                )
+            }
+            composable(MochiFeel_Screen.Profile.name) {
+                canNavigateBack = true
+                ViewProfile(
+                    { navController.navigate(MochiFeel_Screen.Settings.name) })
+            }
+            // @EndSamuel
+
+            // @Gavin
+
+            // @EndGavin
 
         }
     }

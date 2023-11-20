@@ -9,19 +9,15 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.absoluteOffset
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
@@ -29,11 +25,9 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -46,7 +40,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -54,20 +47,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.mochi_feel.R
-import com.example.mochi_feel.data.AuthRepository
 import com.example.mochi_feel.ui.MochiFeel_Screen
 import com.example.mochi_feel.ui.theme.inter
 import kotlinx.coroutines.launch
@@ -93,7 +82,9 @@ fun SignUpView(
     val state = viewModel.signUpState.collectAsState(initial = null)
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color.White),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -278,7 +269,7 @@ fun SignUpView(
                 .padding(horizontal = 40.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            DateOutlinedTextField("Day", birth_day, { birth_day = it }, 1,31)
+            DateOutlinedTextField("Day", birth_day, { birth_day = it }, 1, 31)
             DateOutlinedTextField("Month", birth_month, { birth_month = it }, 1, 12)
             DateOutlinedTextField("Year", birth_year, { birth_year = it }, 1970, 2023)
         }
@@ -408,8 +399,17 @@ fun SignUpView(
             TextButton(
                 onClick = {
                     scope.launch {
-                        viewModel.registerUser(email, password, username, name, birth_day, birth_month, birth_year)
+                        viewModel.registerUser(
+                            email,
+                            password,
+                            username,
+                            name,
+                            birth_day,
+                            birth_month,
+                            birth_year
+                        )
                     }
+                    navController.navigate(MochiFeel_Screen.Home.name)
                 },
                 modifier = Modifier
                     .width(325.dp)
@@ -436,7 +436,12 @@ fun SignUpView(
             }
         }
         val text = buildAnnotatedString {
-            withStyle(style = SpanStyle(fontWeight = FontWeight.Normal, color = Color(0xFF238A91))) {
+            withStyle(
+                style = SpanStyle(
+                    fontWeight = FontWeight.Normal,
+                    color = Color(0xFF238A91)
+                )
+            ) {
                 append("Already have an account? ")
             }
             withStyle(style = SpanStyle(fontWeight = FontWeight.Bold, color = Color(0xFF238A91))) {
@@ -466,10 +471,11 @@ fun SignUpView(
                     fontWeight = FontWeight(500),
                     color = Color(0xFF238A91),
                 ),
-                modifier = Modifier.padding(
-                    start = 20.dp,
-                    end = 10.dp,
-                )
+                modifier = Modifier
+                    .padding(
+                        start = 20.dp,
+                        end = 10.dp,
+                    )
                     .clickable {
                         navController.navigate(MochiFeel_Screen.Login.name)
                     }
