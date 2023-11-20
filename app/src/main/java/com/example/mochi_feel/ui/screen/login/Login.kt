@@ -1,3 +1,4 @@
+import android.widget.DatePicker
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -49,6 +51,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.mochi_feel.R
+import com.example.mochi_feel.model.Calendar
+import com.example.mochi_feel.model.UserManager
 import com.example.mochi_feel.ui.MochiFeel_Screen
 import com.example.mochi_feel.ui.screen.login.LoginViewModel
 import com.example.mochi_feel.ui.theme.inter
@@ -57,10 +61,30 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-public fun LoginView(
+fun LoginView(
     viewModel: LoginViewModel = hiltViewModel(),
     navController: NavController
 ) {
+//    val uid = viewModel.userManager.getUserUid()
+//    DisposableEffect(viewModel) {
+//        if (uid != null) {
+//            viewModel.fetchUserData(uid)
+//        }
+//        onDispose { /* Cleanup or handle disposal if needed */ }
+//    }
+//    val userData by viewModel.userData.collectAsState()
+//
+//    if (userData != null) {
+//        // User data is available, render UI
+//        Column {
+//            Text("username: ${userData!!.username}")
+//            Text("Name: ${userData!!.name}")
+//        }
+//    } else {
+//        CircularProgressIndicator()
+//    }
+//    val n = android.icu.util.Calendar.getInstance().time
+//    Text(text = n.toString())
     val scope = rememberCoroutineScope()
 
     var username by rememberSaveable { mutableStateOf("") }
