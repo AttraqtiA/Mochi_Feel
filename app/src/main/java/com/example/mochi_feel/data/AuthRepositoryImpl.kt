@@ -1,6 +1,8 @@
 package com.example.mochi_feel.data
 
 import android.util.Log
+import com.example.mochi_feel.R
+import com.example.mochi_feel.model.Achievement
 import com.example.mochi_feel.model.User
 import com.example.mochi_feel.model.UserManager
 import com.example.mochi_feel.util.Resource
@@ -92,7 +94,32 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
+    private fun setAchievement(firestore: FirebaseFirestore, uid: String){
+        val achievementCollection = firestore.collection("users").document(uid)
+            .collection("achievements")
+        achievementCollection.add(
+            hashMapOf(
+                "name" to "1 Year User",
+                "image_path" to R.drawable.achievements_1
+            )
+        )
+        achievementCollection.add(
+            hashMapOf(
+                "name" to "500 Entries",
+                "image_path" to R.drawable.achievements_2
+            )
+        )
+        achievementCollection.add(
+            hashMapOf(
+                "name" to "Have 100+ Tags",
+                "image_path" to R.drawable.achievements_3
+            )
+        )
+    }
 
+    private fun setSong(firestore: FirebaseFirestore){
+
+    }
 
     private fun setTags(firestore: FirebaseFirestore, uid: String){
         val tagsCollection = firestore.collection("users").document(uid)

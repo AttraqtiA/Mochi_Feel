@@ -118,12 +118,13 @@ fun MochiFeelRoute() {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val navController = rememberNavController()
     val contextToast = LocalContext.current
-    var canNavigateBack by remember { mutableStateOf(navController.previousBackStackEntry != null) }
+//    var canNavigateBack by remember { mutableStateOf(navController.previousBackStackEntry != null) }
+    var canNavigateBack by remember { mutableStateOf(true) }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         bottomBar = {
-            if (!canNavigateBack) {
+            if (canNavigateBack) {
                 BottomNavBarMF(navController)
             }
         },
@@ -155,11 +156,13 @@ fun MochiFeelRoute() {
 
             // @Christian
             composable(MochiFeel_Screen.Login.name) {
+                canNavigateBack = false
                 LoginView(
                     navController = navController
                 )
             }
             composable(MochiFeel_Screen.SignUp.name) {
+                canNavigateBack = false
                 SignUpView(
                     navController = navController
                 )
