@@ -1,23 +1,37 @@
 package com.example.mochi_feel.ui.screen.journalingEntry
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonElevation
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -32,8 +46,15 @@ import com.example.mochi_feel.ui.theme.CalmGreenLight
 
 @Composable
 fun ViewNewEntry(){
+    var entryContent by remember {
+        mutableStateOf("")
+    }
+
+    val canAdd:Boolean = entryContent.isNotEmpty()
+
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .background(color = Color.White)
             .padding(top = 12.dp)
         ,
@@ -42,7 +63,8 @@ fun ViewNewEntry(){
         Column(
 //          purely for the wrapper
             modifier = Modifier.fillMaxWidth(0.9f),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
 //        header part
             Row(
@@ -79,10 +101,11 @@ fun ViewNewEntry(){
 //                    fontFamily = FontFamily(Font(R.font.inter)),
                     fontWeight = FontWeight(400),
                     color = Color(0xFF238A91),
-
                     ),
                 textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 4.dp)
             )
 
 //        Add recent tags
@@ -100,7 +123,8 @@ fun ViewNewEntry(){
 
                         ))
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.padding(top = 4.dp)
                 ) {
                     Text(text = "Tag1",
                         style = TextStyle(
@@ -110,7 +134,10 @@ fun ViewNewEntry(){
                             color = Color(0xFFFFFFFF),
                         ),
                         modifier = Modifier
-                            .background(color = Color(0xFF238A91), shape = RoundedCornerShape(size = 5.dp))
+                            .background(
+                                color = Color(0xFF238A91),
+                                shape = RoundedCornerShape(size = 5.dp)
+                            )
                             .padding(start = 5.dp, top = 2.dp, end = 5.dp, bottom = 2.dp))
                     Text(text = "Tag2",
                         style = TextStyle(
@@ -120,7 +147,10 @@ fun ViewNewEntry(){
                             color = Color(0xFF238A91),
                         ),
                         modifier = Modifier
-                            .background(color = Color(0xFFEDEDED), shape = RoundedCornerShape(size = 5.dp))
+                            .background(
+                                color = Color(0xFFEDEDED),
+                                shape = RoundedCornerShape(size = 5.dp)
+                            )
                             .padding(start = 5.dp, top = 2.dp, end = 5.dp, bottom = 2.dp))
                     Text(text = "And so on",
                         style = TextStyle(
@@ -130,7 +160,10 @@ fun ViewNewEntry(){
                             color = Color(0xFF238A91),
                         ),
                         modifier = Modifier
-                            .background(color = Color(0xFFEDEDED), shape = RoundedCornerShape(size = 5.dp))
+                            .background(
+                                color = Color(0xFFEDEDED),
+                                shape = RoundedCornerShape(size = 5.dp)
+                            )
                             .padding(start = 5.dp, top = 2.dp, end = 5.dp, bottom = 2.dp))
                 }
             }
@@ -150,7 +183,8 @@ fun ViewNewEntry(){
 
                         ))
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.padding(top = 4.dp)
                 ) {
                     Text(
                         text = "Tag1",
@@ -161,7 +195,10 @@ fun ViewNewEntry(){
                         color = Color(0xFFFFFFFF),
                         ),
                     modifier = Modifier
-                        .background(color = Color(0xFF238A91), shape = RoundedCornerShape(size = 5.dp))
+                        .background(
+                            color = Color(0xFF238A91),
+                            shape = RoundedCornerShape(size = 5.dp)
+                        )
                         .padding(start = 6.dp, top = 4.dp, end = 6.dp, bottom = 4.dp)
                     )
                     Text(text = "Tag2",
@@ -173,7 +210,10 @@ fun ViewNewEntry(){
 
                             ),
                         modifier = Modifier
-                            .background(color = Color(0xFF238A91), shape = RoundedCornerShape(size = 5.dp))
+                            .background(
+                                color = Color(0xFF238A91),
+                                shape = RoundedCornerShape(size = 5.dp)
+                            )
                             .padding(start = 6.dp, top = 4.dp, end = 6.dp, bottom = 4.dp))
                     Text(text = "+ Add Tag",
                         style = TextStyle(
@@ -183,8 +223,15 @@ fun ViewNewEntry(){
                             color = Color(0xFF238A91),
                             ),
                         modifier = Modifier
-                            .border(width = 1.dp, color = Color(0xFF238A91), shape = RoundedCornerShape(size = 5.dp))
-                            .background(color = Color(0xFFFFFFFF), shape = RoundedCornerShape(size = 5.dp))
+                            .border(
+                                width = 1.dp,
+                                color = Color(0xFF238A91),
+                                shape = RoundedCornerShape(size = 5.dp)
+                            )
+                            .background(
+                                color = Color(0xFFFFFFFF),
+                                shape = RoundedCornerShape(size = 5.dp)
+                            )
                             .padding(start = 6.dp, top = 4.dp, end = 6.dp, bottom = 4.dp)
                     )
                 }
@@ -192,7 +239,9 @@ fun ViewNewEntry(){
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp, bottom = 4.dp),
                 horizontalArrangement = Arrangement.Start
             ) {
                 Text(text = "Don't know what to write about?",
@@ -216,17 +265,26 @@ fun ViewNewEntry(){
                             textAlign = TextAlign.Center,
                         ),
                         modifier = Modifier
-                            .border(width = 1.dp, color = CalmGreen, shape = RoundedCornerShape(size = 10.dp))
-                            .background(color = CalmGreenLight, shape = RoundedCornerShape(size = 10.dp))
-                            .padding(start = 6.dp, top = 4.dp, end = 6.dp, bottom = 4.dp)
-                            .clickable {  }
+                            .border(
+                                width = 1.dp,
+                                color = CalmGreen,
+                                shape = RoundedCornerShape(size = 10.dp)
+                            )
+                            .background(
+                                color = CalmGreenLight,
+                                shape = RoundedCornerShape(size = 10.dp)
+                            )
+                            .padding(start = 8.dp, top = 4.dp, end = 8.dp, bottom = 4.dp)
+                            .clickable { }
                 )
 
             }
 
-            Divider(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp), color = CalmGreen, thickness = 1.dp)
+            Divider(modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp), color = CalmGreen, thickness = 1.dp)
 
-            Column(
+            Box(
                 modifier = Modifier
                     .height(500.dp)
                     .fillMaxWidth(0.95f)
@@ -234,16 +292,56 @@ fun ViewNewEntry(){
                     .border(width = 0.1.dp, color = CalmGreen, shape = RoundedCornerShape(10.dp)),
 
             ) {
-                Text(text = "Start writing here...",
-                    modifier = Modifier.padding(8.dp),
-                    style = TextStyle(
+                FloatingActionButton(
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .offset(x = 8.dp, y = 8.dp)
+                        .animateContentSize()
+                        .shadow(0.dp, shape = MaterialTheme.shapes.medium),
+                    onClick = { /*TODO*/ },
+                    containerColor = CalmGreenLight,
+//                    contentColor = CalmGreenLight,
+                    shape = RoundedCornerShape(10.dp),
+//                    elevation = FloatingActionButtonElevation,
+                ) {
+                        Text(
+                            text = if(canAdd) "+ Add New Entry" else "+",
+                            color = Color.White,
+                            modifier = Modifier.padding(horizontal = 12.dp).animateContentSize()
+                        )
+                }
+
+                BasicTextField(
+                    value = entryContent,
+                    onValueChange = { entryContent = it },
+                    textStyle = TextStyle(
                         fontSize = 12.sp,
                         lineHeight = 21.sp,
 //                        fontFamily = FontFamily(Font(R.font.inter)),
                         fontWeight = FontWeight(600),
                         color = CalmGreen,
-                        )
-                    )
+                    ),
+                    modifier = Modifier.padding(8.dp),
+                    decorationBox = { innerTextField ->
+                        Box(modifier = Modifier
+                            .fillMaxSize()
+                            .padding(8.dp)) {
+                            if (entryContent.isEmpty()) {
+                                Text(text = "Start writing here...",
+                                    style = TextStyle(
+                                        fontSize = 12.sp,
+                                        lineHeight = 21.sp,
+//                        fontFamily = FontFamily(Font(R.font.inter)),
+                                        fontWeight = FontWeight(600),
+                                        color = CalmGreen,
+                                    ),
+                                    modifier = Modifier.alpha(0.6f)
+                                )
+                            }
+                            innerTextField()  //<-- Add this
+                        }
+                    }
+                )
             }
         }
     }

@@ -180,7 +180,7 @@ fun ViewEntryDetail(){
                         fontSize = 14.sp,
 //                    fontFamily = FontFamily(Font(R.font.inter)),
                         fontWeight = FontWeight(400),
-                        color = Color(0xFF238A91)
+                        color = CalmGreen
                     ),
                     readOnly = !editMode.value
                 )
