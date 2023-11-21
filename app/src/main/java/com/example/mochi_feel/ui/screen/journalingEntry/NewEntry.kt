@@ -28,12 +28,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mochi_feel.R
 import com.example.mochi_feel.ui.theme.CalmGreen
+import com.example.mochi_feel.ui.theme.CalmGreenLight
 
 @Composable
 fun ViewNewEntry(){
     Column(
         modifier = Modifier.fillMaxSize()
             .background(color = Color.White)
+            .padding(top = 12.dp)
         ,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -200,8 +202,8 @@ fun ViewNewEntry(){
 //                        fontFamily = FontFamily(Font(R.font.inter)),
                         fontWeight = FontWeight(500),
                         color = Color(0xFF238A91),
-
-                        )
+                        ),
+                    modifier = Modifier.padding(end = 6.dp)
                 )
                     Text(text = "Let us help",
                         style = TextStyle(
@@ -209,29 +211,39 @@ fun ViewNewEntry(){
                             lineHeight = 21.sp,
 //                            fontFamily = FontFamily(Font(R.font.inter)),
                             fontWeight = FontWeight(600),
-                            color = Color(0xFFFFFFFF),
+                            color = Color.White,
 
                             textAlign = TextAlign.Center,
                         ),
                         modifier = Modifier
-                            .border(width = 1.dp, color = Color(0xFF238A91), shape = RoundedCornerShape(size = 10.dp))
-                            .background(color = Color(0xFF4ABDC0), shape = RoundedCornerShape(size = 10.dp))
+                            .border(width = 1.dp, color = CalmGreen, shape = RoundedCornerShape(size = 10.dp))
+                            .background(color = CalmGreenLight, shape = RoundedCornerShape(size = 10.dp))
                             .padding(start = 6.dp, top = 4.dp, end = 6.dp, bottom = 4.dp)
                             .clickable {  }
                 )
 
             }
 
-            Divider(modifier = Modifier.fillMaxWidth(), color = CalmGreen, thickness = 1.dp)
+            Divider(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp), color = CalmGreen, thickness = 1.dp)
 
             Column(
                 modifier = Modifier
                     .height(500.dp)
-                    .fillMaxWidth()
-                    .padding(8.dp),
+                    .fillMaxWidth(0.95f)
+                    .padding(8.dp)
+                    .border(width = 0.1.dp, color = CalmGreen, shape = RoundedCornerShape(10.dp)),
 
             ) {
-                Text(text = "Start writing here...")
+                Text(text = "Start writing here...",
+                    modifier = Modifier.padding(8.dp),
+                    style = TextStyle(
+                        fontSize = 12.sp,
+                        lineHeight = 21.sp,
+//                        fontFamily = FontFamily(Font(R.font.inter)),
+                        fontWeight = FontWeight(600),
+                        color = CalmGreen,
+                        )
+                    )
             }
         }
     }
