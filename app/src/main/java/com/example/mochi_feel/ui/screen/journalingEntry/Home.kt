@@ -1,7 +1,5 @@
 package com.example.mochi_feel.ui.screen.journalingEntry
 
-import android.icu.text.SimpleDateFormat
-import android.icu.util.Calendar
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -20,11 +18,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -41,14 +37,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mochi_feel.R
 import com.example.mochi_feel.model.EntryBox
 import com.example.mochi_feel.ui.screen.components.OneEntryBox
 import com.example.mochi_feel.ui.theme.CalmGreen
 import com.example.mochi_feel.ui.theme.inter
 import com.example.mochi_feel.viewmodel.Journaling_Entry.HomeViewModel
-import java.util.Locale
 
 @Composable
 fun HomeView(
@@ -59,6 +53,8 @@ fun HomeView(
     homeViewModel.initiate()
     val userData by homeViewModel.userData.collectAsState()
 
+    val entriesData by homeViewModel.entriesData.collectAsState()
+    
     val variabel_UIState by homeViewModel.uiState.collectAsState()
 8
     val context = LocalContext.current
@@ -182,8 +178,7 @@ fun HomeView(
             }
         })
 
-
-        items(variabel_UIState.EntryBoxList) { entrybox: EntryBox ->
+        items(entriesData ?: emptyList()) { entrybox: EntryBox ->
             OneEntryBox(
                 entrybox.title,
                 entrybox.time,

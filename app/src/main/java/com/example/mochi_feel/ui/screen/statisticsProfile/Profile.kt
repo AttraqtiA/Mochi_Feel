@@ -1,5 +1,7 @@
 package com.example.mochi_feel.ui.screen.statisticsProfile
 
+import android.annotation.SuppressLint
+import android.icu.util.Calendar
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -33,12 +35,16 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mochi_feel.R
 import com.example.mochi_feel.model.Achievement
 import com.example.mochi_feel.ui.theme.CalmGreen
 import com.example.mochi_feel.ui.theme.CalmGreenLight
 import com.example.mochi_feel.ui.theme.inter
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 // still need to wait for the database (?)
 // i can just use dummy data for now, database tinggal input ke viewModel - Gavin
@@ -47,8 +53,10 @@ import com.example.mochi_feel.ui.theme.inter
 fun ViewProfile(
     toSettings: () -> Unit,
 
-    profileViewModel: ProfileViewModel = viewModel()
+    profileViewModel: ProfileViewModel = hiltViewModel()
 ) {
+    profileViewModel.initiate()
+    val userData by profileViewModel.userData.collectAsState()
     val variabel_UIState by profileViewModel.uiState.collectAsState()
 
     LazyColumn(
@@ -76,16 +84,18 @@ fun ViewProfile(
                                 color = Color(0xFFFFFFFF),
                             )
                         )
-                        Text(
-                            text = variabel_UIState.name,
-                            style = TextStyle(
-                                fontSize = 24.sp,
-                                lineHeight = 21.sp,
-                                fontFamily = inter,
-                                fontWeight = FontWeight(700),
-                                color = Color(0xFFFFFFFF),
+                        userData?.name?.let {
+                            Text(
+                                text = it,
+                                style = TextStyle(
+                                    fontSize = 24.sp,
+                                    lineHeight = 21.sp,
+                                    fontFamily = inter,
+                                    fontWeight = FontWeight(700),
+                                    color = Color(0xFFFFFFFF),
+                                )
                             )
-                        )
+                        }
 
                     }
                     Icon(
@@ -121,12 +131,12 @@ fun ViewProfile(
                 ) {
                     InfoCard(
                         name = "Joined",
-                        content = variabel_UIState.getJoinDate(),
+                        content = formatDate(userData?.date_joined),
                         icon = R.drawable.profile_join_icon
                     )
                     InfoCard(
                         name = "Birthday",
-                        content = variabel_UIState.getBirthDate(),
+                        content = formatDate(userData?.birthDate),
                         icon = R.drawable.profile_birthday_icon
                     )
                 }
@@ -273,6 +283,17 @@ fun OneAchievementBox(achievementToDisplay: Achievement) {
                 color = Color(0xFFFFFFFF),
             )
         )
+    }
+}
+
+@SuppressLint("SimpleDateFormat")
+fun formatDate(date: Date?):String{
+    return if (date != null) {
+        val df = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
+        df.format(date)
+    } else {
+        // Handle the case when date is null (return an empty string or another default value)
+        ""
     }
 }
 

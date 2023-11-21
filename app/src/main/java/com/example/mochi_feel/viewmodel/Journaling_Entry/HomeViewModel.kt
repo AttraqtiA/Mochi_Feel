@@ -1,10 +1,8 @@
 package com.example.mochi_feel.viewmodel.Journaling_Entry
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
+import android.icu.util.Calendar
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.mochi_feel.data.AuthRepository
 import com.example.mochi_feel.data.AuthRepositoryImpl
 import com.example.mochi_feel.model.EntryBox
 import com.example.mochi_feel.model.HomeUIState
@@ -17,6 +15,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,7 +24,10 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _userData = MutableStateFlow<User?>(null)
+    private val _entriesData = MutableStateFlow<MutableList<EntryBox>?>(null)
+
     val userData: StateFlow<User?> = _userData
+    val entriesData : StateFlow<MutableList<EntryBox>?> = _entriesData
 
     @Inject
     lateinit var userManager: UserManager
@@ -44,9 +46,39 @@ class HomeViewModel @Inject constructor(
 
     fun fetchUserData(uid: String) {
         viewModelScope.launch {
-            val result = repository.fetchUserData(uid)
-            _userData.value = result
+            try {
+                val result = repository.fetchUserData(uid)
+                _userData.value = result
+
+                // Filter entries based on the same date
+                val targetDate = Calendar.getInstance().time
+                val filteredEntries = result?.entries
+                    ?.filter { entry ->
+                        entry.current_date?.isSameDayAs(targetDate) == true
+                    }
+                    ?.toMutableList()
+
+                _entriesData.value = filteredEntries
+
+                // Do something with _entriesData (e.g., update UI)
+                // ...
+
+            } catch (e: Exception) {
+                // Handle exceptions, e.g., log or display an error message
+                e.printStackTrace()
+            }
         }
+    }
+
+    fun Date?.isSameDayAs(other: Date?): Boolean {
+        if (this == null || other == null) return false
+
+        val cal1 = Calendar.getInstance().apply { time = this@isSameDayAs }
+        val cal2 = Calendar.getInstance().apply { time = other }
+
+        return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
+                cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH) &&
+                cal1.get(Calendar.DAY_OF_MONTH) == cal2.get(Calendar.DAY_OF_MONTH)
     }
 
     private val _uiState = MutableStateFlow(

@@ -3,9 +3,9 @@ package com.example.mochi_feel.data
 import android.icu.util.Calendar
 import android.util.Log
 import com.example.mochi_feel.R
-import com.example.mochi_feel.model.Achievement
+import com.example.mochi_feel.model.EntryBox
+import com.example.mochi_feel.model.Tag
 import com.example.mochi_feel.model.User
-import com.example.mochi_feel.model.UserManager
 import com.example.mochi_feel.util.Resource
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.AuthResult
@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
+import java.util.Date
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
@@ -159,18 +160,55 @@ class AuthRepositoryImpl @Inject constructor(
                 .await()
 
             if (documentSnapshot.exists()) {
-                // The document exists, extract data and return a User object
+                // Your existing code to get User data from Firestore
                 val userData = documentSnapshot.toObject(User::class.java)
 
 // Convert timestamp to Date for the date_joined field
                 val timestamp = documentSnapshot.getTimestamp("date_joined")
                 userData?.date_joined = timestamp?.toDate()
 
+                val birthDate = documentSnapshot.getTimestamp("birthDate")
+                userData?.birthDate = birthDate?.toDate()
+
+// Get entries subcollection
+                val entriesCollection = documentSnapshot.reference.collection("entries")
+                val entryList = entriesCollection.get().await().documents.mapNotNull { entryDoc ->
+                    val entryTimestamp = entryDoc.getTimestamp("current_date")
+                    if (entryTimestamp != null) {
+                        val calendar = Calendar.getInstance()
+                        calendar.time = entryTimestamp.toDate()
+
+                        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+                        val minute = calendar.get(Calendar.MINUTE)
+
+                        EntryBox(
+                            title = entryDoc.getString("title") ?: "",
+                            entry = entryDoc.getString("content") ?: "",
+                            time = "$hour:$minute",
+                            current_date = entryTimestamp.toDate()
+                        )
+                    } else {
+                        null
+                    }
+                }
+                userData?.entries = entryList.toMutableList()
+
+                // Get tags subcollection
+                val tagsCollection = documentSnapshot.reference.collection("tags")
+                val tagList = tagsCollection.get().await().documents.mapNotNull { tagDoc ->
+                    tagDoc.getString("name")?.let {
+                        Tag(
+                            name = it
+                        )
+                    }
+                }
+                userData?.tags = tagList.toMutableList()
                 return userData
             } else {
                 // The document does not exist for the given UID
                 return null
             }
+
         } catch (e: Exception) {
             // Handle exceptions (e.g., network issues, Firestore errors)
             return null

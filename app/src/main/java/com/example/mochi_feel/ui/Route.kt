@@ -139,7 +139,7 @@ fun MochiFeelRoute() {
 
     val contextToast = LocalContext.current
 //    var canNavigateBack by remember { mutableStateOf(navController.previousBackStackEntry != null) }
-    var canNavigateBack by remember { mutableStateOf(true) }
+    var canNavigateBack by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
