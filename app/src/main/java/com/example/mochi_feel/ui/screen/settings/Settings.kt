@@ -2,6 +2,7 @@ package com.example.mochi_feel.ui.screen.settings
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,12 +32,14 @@ import com.example.mochi_feel.ui.theme.CalmGreen
 import com.example.mochi_feel.ui.theme.inter
 
 @Composable
-fun SettingsView() {
+fun SettingsView(
+    toBack: () -> Unit
+) {
     Column (
         modifier = Modifier
-            .padding(20.dp)
-            .background(color = Color.White)
             .fillMaxSize()
+            .background(color = Color.White)
+            .padding(20.dp)
 
     ) {
         Row (
@@ -49,6 +52,9 @@ fun SettingsView() {
                 contentDescription = "back button",
                 tint = CalmGreen,
                 modifier = Modifier.padding(start = 4.dp)
+                    .clickable(
+                        onClick = toBack
+                    )
             )
             Text(
                 text = "Settings",
@@ -314,5 +320,5 @@ fun SettingsView() {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun SettingsPreview() {
-    SettingsView()
+    SettingsView({})
 }

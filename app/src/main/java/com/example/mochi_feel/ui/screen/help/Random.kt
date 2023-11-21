@@ -2,6 +2,7 @@ package com.example.mochi_feel.ui.screen.help
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -41,17 +42,20 @@ import com.example.mochi_feel.viewmodel.Random.RandomViewModel
 
 // Topic changeable. I only made 5 topics though
 @Composable
-fun RandomView(randomViewModel: RandomViewModel) {
+fun RandomView(
+    randomViewModel: RandomViewModel,
+    backToNewEntry: () -> Unit,
+    toBack: () -> Unit
+) {
 
-
-    Column (
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .background(color = Color(0xFFF9FFFF))
             .padding(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Row (
+        Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Start
         ) {
@@ -60,9 +64,12 @@ fun RandomView(randomViewModel: RandomViewModel) {
                 contentDescription = "back button",
                 tint = CalmGreen,
                 modifier = Modifier.padding(start = 4.dp)
+                    .clickable(
+                        onClick = toBack
+                    )
             )
         }
-        Row (
+        Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.Bottom
@@ -91,14 +98,14 @@ fun RandomView(randomViewModel: RandomViewModel) {
             )
         }
         Spacer(modifier = Modifier.height(100.dp))
-        TopicCard (randomViewModel)
+        TopicCard(randomViewModel)
         Spacer(modifier = Modifier.height(20.dp))
-        Row (
+        Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
         ) {
             Button(
-                onClick = {  },
+                onClick = backToNewEntry,
                 colors = ButtonDefaults.buttonColors(
                     CalmGreen
                 ),
@@ -112,35 +119,36 @@ fun RandomView(randomViewModel: RandomViewModel) {
                     .width(260.dp)
                     .height(40.dp)
             ) {
-                Text(text = "Continue Journaling")
+                Text(text = "Continue Journaling",
+                    color = Color.White)
             }
         }
     }
 }
 
 @Composable
-fun TopicCard (
+fun TopicCard(
     randomViewModel: RandomViewModel
 ) {
 
     val topicUiState by randomViewModel.uiState.collectAsState()
     val topic: Topic = randomViewModel.getTopic(topicUiState.topicNumber)
 
-    Box (
+    Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(300.dp)
             .background(color = Color(0xFF238A91), shape = RoundedCornerShape(size = 15.dp))
             .padding(15.dp)
     ) {
-        Column (
+        Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
         ) {
-            Row (
+            Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
@@ -153,7 +161,7 @@ fun TopicCard (
                         .height(30.dp)
                 )
                 Spacer(modifier = Modifier.width(10.dp))
-                Text (
+                Text(
                     text = topic.description,
                     style = TextStyle(
                         fontSize = 14.sp,
@@ -168,7 +176,7 @@ fun TopicCard (
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))
-            Text (
+            Text(
                 text = topic.name,
                 style = TextStyle(
                     fontSize = 24.sp,
@@ -183,9 +191,9 @@ fun TopicCard (
                     .padding(horizontal = 12.dp, vertical = 4.dp)
             )
             Spacer(modifier = Modifier.height(16.dp))
-            Text (
+            Text(
                 text = "Here are some questions to Guide you :",
-                style = TextStyle (
+                style = TextStyle(
                     fontSize = 14.sp,
                     lineHeight = 21.sp,
                     fontFamily = inter,
@@ -195,9 +203,9 @@ fun TopicCard (
                 ),
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Text (
+            Text(
                 text = topic.questions,
-                style = TextStyle (
+                style = TextStyle(
                     fontSize = 14.sp,
                     lineHeight = 21.sp,
                     fontFamily = inter,
@@ -207,15 +215,16 @@ fun TopicCard (
                 )
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Button (
+            Button(
                 onClick = { randomViewModel.newTopic() },
                 colors = ButtonDefaults.buttonColors(
                     CalmGreen
                 ),
             ) {
                 // change to dice icon
-                Text (
-                    text = "Randomize Topic"
+                Text(
+                    text = "Randomize Topic",
+                    color = Color.White
                 )
             }
         }
@@ -225,5 +234,5 @@ fun TopicCard (
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun RandomPreview() {
-    RandomView(RandomViewModel())
+    RandomView(RandomViewModel(), {}, {})
 }

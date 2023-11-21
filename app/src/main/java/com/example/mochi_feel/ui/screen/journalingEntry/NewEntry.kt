@@ -13,13 +13,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingActionButtonElevation
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -45,7 +42,11 @@ import com.example.mochi_feel.ui.theme.CalmGreen
 import com.example.mochi_feel.ui.theme.CalmGreenLight
 
 @Composable
-fun ViewNewEntry(){
+fun ViewNewEntry(
+    saveNewEntry: () -> Unit,
+    toHelpPage: () -> Unit,
+    toBack: () -> Unit
+){
     var entryContent by remember {
         mutableStateOf("")
     }
@@ -76,7 +77,9 @@ fun ViewNewEntry(){
                     painter = painterResource(id = R.drawable.baseline_keyboard_backspace_24),
                     contentDescription = "back button",
                     tint = CalmGreen,
-                    modifier = Modifier.padding(start = 4.dp))
+                    modifier = Modifier.padding(start = 4.dp).clickable(
+                        onClick = toBack
+                    ))
                 Text(text = "New Entry",
                     style = TextStyle(
                         fontSize = 20.sp,
@@ -89,9 +92,12 @@ fun ViewNewEntry(){
                     ))
                 Icon(
                     painter = painterResource(id = R.drawable.baseline_save_24),
-                    contentDescription = "back button",
+                    contentDescription = "save button",
                     tint = CalmGreen,
-                    modifier = Modifier.padding(end = 4.dp))
+                    modifier = Modifier.padding(end = 4.dp)
+                        .clickable(
+                            onClick = saveNewEntry
+                        ))
             }
             Text(
                 text = "Thursday, 12 October",
@@ -275,7 +281,9 @@ fun ViewNewEntry(){
                                 shape = RoundedCornerShape(size = 10.dp)
                             )
                             .padding(start = 8.dp, top = 4.dp, end = 8.dp, bottom = 4.dp)
-                            .clickable { }
+                            .clickable(
+                                onClick = toHelpPage
+                            )
                 )
 
             }
@@ -350,5 +358,5 @@ fun ViewNewEntry(){
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun PreviewNewEntry() {
-    ViewNewEntry()
+    ViewNewEntry({}, {}, {})
 }

@@ -30,6 +30,7 @@ fun OneEntryBox(
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(bottom = 24.dp)
             .background(color = CalmGreen, shape = RoundedCornerShape(size = 10.dp))
             .padding(16.dp)
     ) {

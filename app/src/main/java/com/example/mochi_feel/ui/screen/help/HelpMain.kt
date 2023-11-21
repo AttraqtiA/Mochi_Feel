@@ -2,6 +2,7 @@ package com.example.mochi_feel.ui.screen.help
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,7 +33,11 @@ import com.example.mochi_feel.ui.theme.CalmGreen
 import com.example.mochi_feel.ui.theme.inter
 
 @Composable
-fun HelpMainView() {
+fun HelpMainView(
+    toRandom: () -> Unit,
+    toEmotion: () -> Unit,
+    toBack: () -> Unit
+) {
     Column (
         modifier = Modifier
             .fillMaxSize()
@@ -49,6 +54,9 @@ fun HelpMainView() {
                 contentDescription = "back button",
                 tint = CalmGreen,
                 modifier = Modifier.padding(start = 4.dp)
+                    .clickable(
+                        onClick = toBack
+                    )
             )
         }
         Spacer(modifier = Modifier.height(30.dp))
@@ -77,7 +85,8 @@ fun HelpMainView() {
                     spotColor = Color(0xFF238A91),
                     ambientColor = Color(0xFF238A91)
                 )
-                .background(color = Color(0xFF4ABDC0), shape = RoundedCornerShape(size = 10.dp)),
+                .background(color = Color(0xFF4ABDC0), shape = RoundedCornerShape(size = 10.dp))
+                .clickable( onClick = toRandom ),
             ) {
             Image(
                 painter = painterResource(id = R.drawable.help_1),
@@ -113,7 +122,8 @@ fun HelpMainView() {
                     spotColor = Color(0xFF238A91),
                     ambientColor = Color(0xFF238A91)
                 )
-                .background(color = Color(0xFF4ABDC0), shape = RoundedCornerShape(size = 10.dp)),
+                .background(color = Color(0xFF4ABDC0), shape = RoundedCornerShape(size = 10.dp))
+                .clickable( onClick = toEmotion ),
         ) {
             Image(
                 painter = painterResource(id = R.drawable.help_2),
@@ -145,5 +155,5 @@ fun HelpMainView() {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun HelpMainPreview() {
-    HelpMainView()
+    HelpMainView({}, {}, {})
 }

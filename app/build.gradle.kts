@@ -86,4 +86,8 @@ dependencies {
     kapt ("com.google.dagger:hilt-android-compiler:2.44")
     kapt ("androidx.hilt:hilt-compiler:1.0.0")
     implementation ("androidx.hilt:hilt-navigation-compose:1.0.0")
+
+    // Change Navbar Color
+    implementation ("com.google.accompanist:accompanist-systemuicontroller:0.27.0")
+
 }

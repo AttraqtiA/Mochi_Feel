@@ -2,6 +2,7 @@ package com.example.mochi_feel.ui.screen.help
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,7 +39,10 @@ import com.example.mochi_feel.ui.theme.inter
 
 // might change to showing the step 1 by 1
 @Composable
-fun EmotionView() {
+fun EmotionView(
+    backToNewEntry: () -> Unit,
+    toBack: () -> Unit
+) {
     LazyColumn (
         modifier = Modifier
             .fillMaxSize()
@@ -55,6 +59,9 @@ fun EmotionView() {
                     contentDescription = "back button",
                     tint = CalmGreen,
                     modifier = Modifier.padding(start = 4.dp)
+                        .clickable(
+                            onClick = toBack
+                        )
                 )
             }
         }
@@ -107,11 +114,12 @@ fun EmotionView() {
 
         item {
             Row (
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth()
+                    .padding(bottom = 24.dp),
                 horizontalArrangement = Arrangement.Center
             ) {
                 Button(
-                    onClick = {  },
+                    onClick = backToNewEntry,
                     colors = ButtonDefaults.buttonColors(
                         CalmGreen
                     ),
@@ -125,7 +133,8 @@ fun EmotionView() {
                         .width(260.dp)
                         .height(40.dp)
                 ) {
-                    Text(text = "Continue Journaling")
+                    Text(text = "Continue Journaling",
+                        color = Color.White)
                 }
             }
         }
@@ -244,5 +253,5 @@ fun Step3Box() {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun EmotionPreview() {
-    EmotionView()
+    EmotionView({}, {})
 }
