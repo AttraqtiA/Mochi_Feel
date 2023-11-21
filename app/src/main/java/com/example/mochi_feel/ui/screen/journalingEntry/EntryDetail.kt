@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -21,8 +23,10 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TextFieldDefaults.textFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,16 +41,6 @@ import androidx.compose.ui.unit.sp
 import com.example.mochi_feel.R
 import com.example.mochi_feel.ui.theme.CalmGreen
 
-
-//val transparentTextField = textFieldColors(
-//    containerColor = Color.Transparent,
-//    unfocusedIndicatorColor = Color.Transparent,
-//    focusedIndicatorColor = Color.Transparent,
-//    errorIndicatorColor = Color.Transparent,
-//    disabledIndicatorColor = Color.Transparent,
-//    textColor = CalmGreen
-//)
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ViewEntryDetail(){
@@ -54,20 +48,12 @@ fun ViewEntryDetail(){
     val entryTime = "08:20, Wednesday 11 October 2023"
     val entryContent:String = "This morning I came down for breakfast and found a huge strawberry cake on the counter. My mom told me it was a gift from the Hudsons. Apparently they are giving out strawberry cake for the whole neighborhood as a celebration on their newborn niece.\n" +
             "\n" +
-            "But why do they waste time and money to share it with the whole neighborhood? Do they feel so much joy that they felt the need to spread joy to everyone around them?\n" +
+            "But why do they waste time and money to share it with the whole neighborhood? Do they feel so much joy that they felt the need to spread joy to everyone around them?\n\n" +
             "I want to feel that kind of joy too someday."
 
-    val editedContent = remember {
-        mutableStateOf(entryContent)
-    }
-
-    val editedTitle: MutableState<String> = remember {
-        mutableStateOf(entryTitle)
-    }
-
-    val editMode = remember {
-        mutableStateOf(false)
-    }
+    var editedContent by remember { mutableStateOf(entryContent) }
+    var editedTitle by  remember { mutableStateOf(entryTitle) }
+    val editMode = remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -97,24 +83,14 @@ fun ViewEntryDetail(){
                         .padding(start = 4.dp, top = 12.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ){
-                    Column {
-                        TextField(
-                            value = editedTitle.value,
-                            onValueChange = { editedTitle.value = it },
-                            enabled = editMode.value,
-                            colors = TextFieldDefaults.textFieldColors(
-                                containerColor = Color.Transparent,
-                                unfocusedIndicatorColor = Color.Transparent,
-                                focusedIndicatorColor = Color.Transparent,
-                                errorIndicatorColor = Color.Transparent,
-                                disabledIndicatorColor = Color.Transparent,
-                                textColor = CalmGreen,
-                                disabledTextColor = CalmGreen
-                            ),
-                            modifier = Modifier.padding(0.dp)
-                        )
-                        Text(text = entryTitle,
-                            style = TextStyle(
+                    Column(
+                        modifier = Modifier.fillMaxWidth(0.8f)
+                    ) {
+                        BasicTextField(
+                            value = editedTitle,
+                            onValueChange = { editedTitle = it },
+                            readOnly = !editMode.value,
+                            textStyle = TextStyle(
                                 fontSize = 16.sp,
 //                            fontFamily = FontFamily(Font(R.font.inter)),
                                 fontWeight = FontWeight(600),
@@ -195,30 +171,18 @@ fun ViewEntryDetail(){
                         )
                     }
                 }
-
-//                Text(text = entryContent,
-//                    style = TextStyle(
-//                        fontSize = 14.sp,
-////                    fontFamily = FontFamily(Font(R.font.inter)),
-//                        fontWeight = FontWeight(400),
-//                        color = Color(0xFF238A91),
-//                    )
-//                )
-
-                TextField(
-                    value = editedContent.value,
-                    onValueChange = { editedContent.value = it },
-                    enabled = editMode.value,
-                    colors = TextFieldDefaults.textFieldColors(
-                        containerColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        focusedIndicatorColor = Color.Transparent,
-                        errorIndicatorColor = Color.Transparent,
-                        disabledIndicatorColor = Color.Transparent,
-                        textColor = CalmGreen,
-                        disabledTextColor = CalmGreen
+                BasicTextField(
+                    value = editedContent,
+                    onValueChange = {
+                        editedContent = it
+                    },
+                    textStyle = TextStyle(
+                        fontSize = 14.sp,
+//                    fontFamily = FontFamily(Font(R.font.inter)),
+                        fontWeight = FontWeight(400),
+                        color = Color(0xFF238A91)
                     ),
-                    modifier = Modifier.padding(0.dp)
+                    readOnly = !editMode.value
                 )
             }
         }
