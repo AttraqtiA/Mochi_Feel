@@ -2,8 +2,10 @@ package com.example.mochi_feel.ui.screen.signUp
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import com.example.mochi_feel.data.AuthRepository
 import com.example.mochi_feel.model.SignUpState
+import com.example.mochi_feel.ui.MochiFeel_Screen
 import com.example.mochi_feel.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -27,7 +29,8 @@ class SignUpViewModel @Inject constructor(
         name:String,
         birthDay: String,
         birthMonth: String,
-        birthYear: String
+        birthYear: String,
+        navController: NavController
     ) = viewModelScope.launch {
         val birthDate = "$birthDay-$birthMonth-$birthYear"
 
@@ -35,6 +38,7 @@ class SignUpViewModel @Inject constructor(
             when (result) {
                 is Resource.Success -> {
                     _signUpState.send(SignUpState(isSuccess = "Sign Up Success "))
+                    navController.navigate(MochiFeel_Screen.Login.name)
                 }
                 is Resource.Loading -> {
                     _signUpState.send(SignUpState(isLoading = true))

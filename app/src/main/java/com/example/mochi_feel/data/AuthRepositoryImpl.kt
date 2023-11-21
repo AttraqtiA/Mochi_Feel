@@ -38,16 +38,10 @@ class AuthRepositoryImpl @Inject constructor(
             emit(Resource.Error(it.message.toString()))
         }
     }
-    suspend fun getUserUID(username: String, password: String):String? {
-        val userEmail = getUserEmailByUsername(username)
 
-        // If the email is found, proceed with Firebase Authentication
-        if (userEmail != null) {
-            val result = firebaseAuth.uid
-            return firebaseAuth.uid ?: ""
-        } else {
-            return null
-        }
+     fun getUserUID(): String? {
+        val result = firebaseAuth.uid
+        return firebaseAuth.uid ?: ""
     }
 
     private suspend fun getUserEmailByUsername(username: String): String? {
@@ -80,7 +74,7 @@ class AuthRepositoryImpl @Inject constructor(
                         "birthDate" to birthDate,
                         "email" to email
                     )
-                     //happy, sad, rant
+                    //happy, sad, rant
                     firestore.collection("users").document(user.uid)
                         .set(userData)
                     setTags(firestore, user.uid)
@@ -94,7 +88,7 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
-    private fun setAchievement(firestore: FirebaseFirestore, uid: String){
+    private fun setAchievement(firestore: FirebaseFirestore, uid: String) {
         val achievementCollection = firestore.collection("users").document(uid)
             .collection("achievements")
         achievementCollection.add(
@@ -117,11 +111,11 @@ class AuthRepositoryImpl @Inject constructor(
         )
     }
 
-    private fun setSong(firestore: FirebaseFirestore){
+    private fun setSong(firestore: FirebaseFirestore) {
 
     }
 
-    private fun setTags(firestore: FirebaseFirestore, uid: String){
+    private fun setTags(firestore: FirebaseFirestore, uid: String) {
         val tagsCollection = firestore.collection("users").document(uid)
             .collection("tags")
         tagsCollection.add(

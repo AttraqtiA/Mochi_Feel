@@ -406,10 +406,10 @@ fun SignUpView(
                             name,
                             birth_day,
                             birth_month,
-                            birth_year
+                            birth_year,
+                            navController
                         )
                     }
-                    navController.navigate(MochiFeel_Screen.Home.name)
                 },
                 modifier = Modifier
                     .width(325.dp)

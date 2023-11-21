@@ -2,11 +2,13 @@ package com.example.mochi_feel.ui.screen.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import com.example.mochi_feel.data.AuthRepository
 import com.example.mochi_feel.data.AuthRepositoryImpl
 import com.example.mochi_feel.model.LoginState
 import com.example.mochi_feel.model.User
 import com.example.mochi_feel.model.UserManager
+import com.example.mochi_feel.ui.MochiFeel_Screen
 import com.example.mochi_feel.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -37,12 +39,13 @@ class LoginViewModel @Inject constructor(
     val _signInState = Channel<LoginState>()
     val signInState = _signInState.receiveAsFlow()
 
-    fun loginUser(username: String, password: String) = viewModelScope.launch {
+    fun loginUser(username: String, password: String, navController: NavController) = viewModelScope.launch {
         repository.loginUser(username, password).collect { result ->
             when (result) {
                 is Resource.Success -> {
-                    repository.getUserUID(username, password)?.let { userManager.setUserUid(it) }
+                    repository.getUserUID()?.let { userManager.setUserUid(it) }
                     _signInState.send(LoginState(isSuccess = "Sign In Success "))
+                    navController.navigate(MochiFeel_Screen.Home.name)
                 }
                 is Resource.Loading -> {
                     _signInState.send(LoginState(isLoading = true))

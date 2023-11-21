@@ -279,9 +279,8 @@ fun LoginView(
             TextButton(
                 onClick = {
                     scope.launch {
-                        viewModel.loginUser(username, password)
+                        viewModel.loginUser(username, password, navController)
                     }
-                    navController.navigate(MochiFeel_Screen.Home.name)
                 },
                 modifier = Modifier
                     .width(325.dp)
