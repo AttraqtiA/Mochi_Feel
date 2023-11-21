@@ -1,5 +1,6 @@
 package com.example.mochi_feel.data
 
+import android.icu.util.Calendar
 import android.util.Log
 import com.example.mochi_feel.R
 import com.example.mochi_feel.model.Achievement
@@ -72,7 +73,8 @@ class AuthRepositoryImpl @Inject constructor(
                         "username" to username,
                         "name" to name,
                         "birthDate" to birthDate,
-                        "email" to email
+                        "email" to email,
+                        "date_joined" to Calendar.getInstance().time
                     )
                     //happy, sad, rant
                     firestore.collection("users").document(user.uid)
@@ -109,10 +111,6 @@ class AuthRepositoryImpl @Inject constructor(
                 "image_path" to R.drawable.achievements_3
             )
         )
-    }
-
-    private fun setSong(firestore: FirebaseFirestore) {
-
     }
 
     private fun setTags(firestore: FirebaseFirestore, uid: String) {
@@ -163,6 +161,11 @@ class AuthRepositoryImpl @Inject constructor(
             if (documentSnapshot.exists()) {
                 // The document exists, extract data and return a User object
                 val userData = documentSnapshot.toObject(User::class.java)
+
+// Convert timestamp to Date for the date_joined field
+                val timestamp = documentSnapshot.getTimestamp("date_joined")
+                userData?.date_joined = timestamp?.toDate()
+
                 return userData
             } else {
                 // The document does not exist for the given UID
