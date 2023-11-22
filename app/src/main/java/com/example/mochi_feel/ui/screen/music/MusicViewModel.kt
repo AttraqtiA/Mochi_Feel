@@ -2,6 +2,8 @@ package com.example.mochi_feel.ui.screen.music
 
 import android.content.Context
 import android.media.MediaPlayer
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.mochi_feel.R
 import com.example.mochi_feel.model.Music
@@ -11,6 +13,7 @@ class MusicViewModel : ViewModel() {
     companion object {
         var mediaPlayer: MediaPlayer? = null
     }
+
     private var currentMusic: Music? = null
 
     private val privateMusicList = mutableListOf(
@@ -18,14 +21,20 @@ class MusicViewModel : ViewModel() {
         Music("Rainy Jazz", "Mochi Feel", R.raw.rainy_jazz),
         Music("Full Focus", "Mochi Feel", R.raw.improve_focus),
         Music("Zen Harmony", "Mochi Feel", R.raw.zen_harmony),
+        Music("Ghost Duet", "Mochi Feel", R.raw.ghost_duet),
+        Music("Feels Like Autumn", "Mochi Feel", R.raw.feels_like_autumn),
     )
+
+    private var _selectedMusic = mutableStateOf<Music?>(null)
+    var selectedMusic: State<Music?> = _selectedMusic
 
     fun getMusicList(): MutableList<Music> {
         return privateMusicList
     }
+
     fun initializeMediaPlayer(context: Context, music: Music) {
         mediaPlayer?.stop()
-        mediaPlayer?.release() // Release previous MediaPlayer instance if any
+        mediaPlayer?.release()
         mediaPlayer = null
 
         mediaPlayer = MediaPlayer.create(context, music.song_path)
@@ -51,7 +60,17 @@ class MusicViewModel : ViewModel() {
     }
 
     fun isPlaying(): Boolean {
-        return mediaPlayer?.isPlaying == true // returns true if the mediaPlayer is currently playing
+        return mediaPlayer?.isPlaying == true
+    }
+
+    fun playPauseToggle(music: Music, context: Context) {
+        if (isPlaying() && music == getCurrentMusic()) {
+            pauseMusic()
+        } else {
+            initializeMediaPlayer(context, music)
+            startMusic()
+            _selectedMusic.value = music
+        }
     }
 
     override fun onCleared() {
