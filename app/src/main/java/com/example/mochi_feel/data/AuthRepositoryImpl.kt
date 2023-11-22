@@ -56,6 +56,47 @@ class AuthRepositoryImpl @Inject constructor(
         return querySnapshot.documents.firstOrNull()?.getString("email")
     }
 
+     fun addTag(name: String) {
+        getUserUID()?.let {
+            val userDocumentRef = firestore.collection("users").document(it)
+
+            // Update the "tags" field with the new tag
+            userDocumentRef.collection("tags").add(
+                "name" to name
+            )
+        }
+    }
+
+    suspend fun addEntries(
+        title: String,
+        content: String,
+        date: Date,
+        tagsList: MutableList<Tag>?
+    ) {
+        getUserUID()?.let {
+            val userDocumentRef = firestore.collection("users").document(it)
+
+            val entryData = hashMapOf(
+                "title" to title,
+                "content" to content,
+                "current_date" to Calendar.getInstance().time,
+            )
+            val entryRef = userDocumentRef.collection("entries").add(entryData).await()
+            val entryId = entryRef.id
+
+            // Add tags to the "tags" subcollection of the entry
+            if (tagsList != null) {
+                for (tag in tagsList) {
+                    userDocumentRef
+                        .collection("entries")
+                        .document(entryId)
+                        .collection("tags")
+                        .add(hashMapOf("name" to tag.name))
+                }
+            }
+        }
+    }
+
     override fun registerUser(
         email: String,
         password: String,

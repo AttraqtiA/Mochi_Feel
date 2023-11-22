@@ -129,7 +129,7 @@ fun ViewEntry(
                     maxLines = 1,
                     decorationBox = { innerTextField ->
                         Box(modifier = Modifier
-                            .fillMaxSize()
+//                            .fillMaxSize()
                             .padding(8.dp)) {
                             if (searchFilter.isEmpty()) {
                                 Text(text = "Search 'Title'",

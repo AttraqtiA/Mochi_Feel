@@ -42,7 +42,9 @@ class EntryListViewModel @Inject constructor(
             val result = repository.fetchUserData(uid)
             _userData.value = result
 
-            _entriesData.value = result?.entries?.toMutableList()
+            val sortedEntries = result?.entries?.toMutableList()?.sortedByDescending { it.current_date }
+
+            _entriesData.value = sortedEntries as MutableList<EntryBox>?
         }
     }
 }

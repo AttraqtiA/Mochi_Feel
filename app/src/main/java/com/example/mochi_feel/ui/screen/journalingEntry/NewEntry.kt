@@ -1,6 +1,7 @@
 package com.example.mochi_feel.ui.screen.journalingEntry
 
 import android.annotation.SuppressLint
+import android.icu.util.Calendar
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -57,6 +58,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.mochi_feel.R
 import com.example.mochi_feel.model.Tag
+import com.example.mochi_feel.ui.screen.statisticsProfile.formatDate
 import com.example.mochi_feel.ui.theme.CalmGreen
 import com.example.mochi_feel.ui.theme.CalmGreenLight
 import com.example.mochi_feel.viewmodel.Journaling_Entry.HomeViewModel
@@ -69,7 +71,7 @@ fun ViewNewEntry(
     saveNewEntry: () -> Unit,
     toHelpPage: () -> Unit,
     toBack: () -> Unit,
-//    newEntryViewModel: NewEntryViewModel = hiltViewModel()
+    newEntryViewModel: NewEntryViewModel = hiltViewModel()
 ){
 //    val entriesData by newEntryViewModel.entriesData.collectAsState()
 
@@ -176,7 +178,7 @@ fun ViewNewEntry(
                         ))
             }
             Text(
-                text = "Thursday, 12 October",
+                text = formatDate(Calendar.getInstance().time),
                 style = TextStyle(
                     fontSize = 14.sp,
                     lineHeight = 21.sp,
