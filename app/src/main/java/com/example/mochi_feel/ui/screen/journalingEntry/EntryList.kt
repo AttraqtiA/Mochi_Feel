@@ -218,7 +218,7 @@ fun ViewEntry(
                     OneEntryBox(
                         entrybox.title,
                         entrybox.time,
-                        entrybox.getEntryBoxDate(),
+                        entrybox.current_date,
                         entrybox.tags_list,
                         entrybox.entry,
                         toEntryDetail
