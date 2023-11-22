@@ -221,8 +221,14 @@ fun ViewNewEntry(
                         content = {
                             items(tagsList){tag:Tag ->
                                 Text(text = tag.name,
-                                    style = tagUnselectedText,
-                                    modifier = tagUnselectedModifier
+                                    style = if(tag in selectedTags)tagSelectedText else tagUnselectedText,
+                                    modifier = if(tag in selectedTags){
+                                        tagSelectedModifier
+                                            .clickable { viewModel.unselectTag(tag) }
+                                    } else {
+                                        tagUnselectedModifier
+                                            .clickable { viewModel.selectTag(tag) }
+                                           },
                                 )
                             }
                         }
@@ -257,7 +263,13 @@ fun ViewNewEntry(
                                 Text(
                                     text = tag.name,
                                     style = if(tag in selectedTags)tagSelectedText else tagUnselectedText,
-                                    modifier = if(tag in selectedTags)tagSelectedModifier else tagUnselectedModifier
+                                    modifier = if(tag in selectedTags){
+                                        tagSelectedModifier
+                                            .clickable { viewModel.unselectTag(tag) }
+                                    } else {
+                                        tagUnselectedModifier
+                                            .clickable { viewModel.selectTag(tag) }
+                                    },
                                 )
                             }
                         }
