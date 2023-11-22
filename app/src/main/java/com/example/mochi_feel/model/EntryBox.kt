@@ -8,7 +8,7 @@ data class EntryBox(
     val title: String,
     val time: String,
     val current_date: Date? = Date(),
-    val tags_list: MutableList<Tag> = mutableListOf(Tag(name = "lost hope"), Tag(name = "tired of life")),
+    val tags_list: MutableList<Tag>?,
     val entry: String
 ) {
     @SuppressLint("SimpleDateFormat")

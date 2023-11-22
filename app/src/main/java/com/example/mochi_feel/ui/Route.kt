@@ -223,7 +223,8 @@ fun MochiFeelRoute() {
                 canNavigateBack = true
                 ViewEntry(
 //                    val uid: Int = 0,
-                    { navController.navigate(MochiFeel_Screen.EntryDetail.name+"/"+"ini uid") } //uid
+//                    { navController.navigate("${MochiFeel_Screen.EntryDetail.name}/$uid") }
+                    { navController.navigate("${MochiFeel_Screen.EntryDetail.name}/$0") }
                 )
             }
 

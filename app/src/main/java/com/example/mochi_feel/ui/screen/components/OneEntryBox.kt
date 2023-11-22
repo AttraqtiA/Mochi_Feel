@@ -26,7 +26,7 @@ fun OneEntryBox(
     title: String,
     time: String,
     current_date: Date?,
-    tags_list: MutableList<Tag>,
+    tags_list: MutableList<Tag>?,
     entry: String,
     toEntryDetail: () -> Unit,
 ) {
@@ -49,33 +49,35 @@ fun OneEntryBox(
             modifier = Modifier.padding(bottom = 4.dp)
         )
         Text(
-            text = "${time}, ${current_date}",
+            text = "${current_date}",
             fontSize = 12.sp,
             fontFamily = inter,
             fontWeight = FontWeight(500),
             color = Color(0xFFFFFFFF),
             modifier = Modifier.padding(bottom = 8.dp)
         )
+        if (tags_list != null) {
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            for (tags in tags_list) {
-                Row(
-                    Modifier
-                        .background(
-                            color = Color(0xFFFFFFFF), shape = RoundedCornerShape(size = 5.dp)
+                for (tags in tags_list) {
+                    Row(
+                        Modifier
+                            .background(
+                                color = Color(0xFFFFFFFF), shape = RoundedCornerShape(size = 5.dp)
+                            )
+                            .padding(start = 5.dp, top = 2.dp, end = 5.dp, bottom = 2.dp)
+                    ) {
+                        Text(
+                            text = tags.name,
+                            fontSize = 8.sp,
+                            fontFamily = inter,
+                            fontWeight = FontWeight(700),
+                            color = Color(0xFF238A91),
                         )
-                        .padding(start = 5.dp, top = 2.dp, end = 5.dp, bottom = 2.dp)
-                ) {
-                    Text(
-                        text = tags.name,
-                        fontSize = 8.sp,
-                        fontFamily = inter,
-                        fontWeight = FontWeight(700),
-                        color = Color(0xFF238A91),
-                    )
+                    }
                 }
             }
         }
