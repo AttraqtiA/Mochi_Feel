@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -36,6 +37,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.mochi_feel.R
 import com.example.mochi_feel.model.EntryBox
+import com.example.mochi_feel.model.Tag
 import com.example.mochi_feel.ui.screen.components.OneEntryBox
 import com.example.mochi_feel.ui.theme.CalmGreen
 import com.example.mochi_feel.viewmodel.Journaling_Entry.EntryListViewModel
@@ -48,11 +50,47 @@ fun ViewEntry(
 ) {
     viewModel.initiate()
 
+    val tagSelectedText = TextStyle(
+        fontSize = 12.sp,
+        fontWeight = FontWeight(700),
+        color = Color(0xFFEDEDED),
+    )
+    val tagSelectedModifier = Modifier
+        .background(
+            color = CalmGreen,
+            shape = RoundedCornerShape(size = 5.dp)
+        )
+        .padding(
+            start = 5.dp,
+            top = 2.dp,
+            end = 5.dp,
+            bottom = 2.dp
+        )
+
+    val tagUnselectedText = TextStyle(
+        fontSize = 12.sp,
+        fontWeight = FontWeight(700),
+        color = CalmGreen,
+    )
+    val tagUnselectedModifier = Modifier
+        .background(
+            color = Color(0xFFEDEDED),
+            shape = RoundedCornerShape(size = 5.dp)
+        )
+        .padding(
+            start = 5.dp,
+            top = 2.dp,
+            end = 5.dp,
+            bottom = 2.dp
+        )
+
+    var selectedTags by remember { mutableStateOf(viewModel.selectedTags) }
+
     val userData by viewModel.userData.collectAsState()
     val entriesData by viewModel.entriesData.collectAsState()
 
     var sortAscend by remember { mutableStateOf(false) }
-    if(sortAscend) {
+    if (sortAscend) {
         viewModel.sortDateAscending()
     }
     var searchFilter by remember { mutableStateOf("") }
@@ -134,16 +172,19 @@ fun ViewEntry(
                     modifier = Modifier.padding(8.dp),
                     maxLines = 1,
                     decorationBox = { innerTextField ->
-                        Box(modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp)
+                        ) {
                             if (searchFilter.isEmpty()) {
-                                Text(text = "Search 'Title'",
+                                Text(
+                                    text = "Search 'Title'",
                                     style = TextStyle(
                                         fontSize = 12.sp,
                                         fontWeight = FontWeight(600),
                                         color = Color(0x80238A91),
-                                        ),
+                                    ),
                                     modifier = Modifier.alpha(0.6f)
                                 )
                             }
@@ -169,67 +210,46 @@ fun ViewEntry(
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Text(
-                        text = "Tag1",
-                        style = TextStyle(
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight(700),
-                            color = Color(0xFFFFFFFF),
-                        ),
-                        modifier = Modifier
-                            .background(
-                                color = Color(0xFF238A91),
-                                shape = RoundedCornerShape(size = 5.dp)
-                            )
-                            .padding(start = 5.dp, top = 2.dp, end = 5.dp, bottom = 2.dp)
-                    )
-                    Text(
-                        text = "Tag2",
-                        style = TextStyle(
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight(700),
-                            color = Color(0xFF238A91),
-                        ),
-                        modifier = Modifier
-                            .background(
-                                color = Color(0xFFEDEDED),
-                                shape = RoundedCornerShape(size = 5.dp)
-                            )
-                            .padding(start = 5.dp, top = 2.dp, end = 5.dp, bottom = 2.dp)
-                    )
-                    Text(
-                        text = "And so on",
-                        style = TextStyle(
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight(700),
-                            color = Color(0xFF238A91),
-                        ),
-                        modifier = Modifier
-                            .background(
-                                color = Color(0xFFEDEDED),
-                                shape = RoundedCornerShape(size = 5.dp)
-                            )
-                            .padding(start = 5.dp, top = 2.dp, end = 5.dp, bottom = 2.dp)
+                    LazyRow(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        content = {
+//                            items(tagsList){tag:Tag ->
+                            items(userData?.tags.orEmpty()) { tag: Tag ->
+                                Text(
+                                    text = tag.name,
+                                    style = if (tag in selectedTags) tagSelectedText else tagUnselectedText,
+                                    modifier = if (tag in selectedTags) {
+                                        tagSelectedModifier
+                                            .clickable { selectedTags.remove(tag) }
+                                    } else {
+                                        tagUnselectedModifier
+                                            .clickable { selectedTags.add(tag) }
+                                    },
+                                )
+                            }
+                        }
                     )
                 }
-            }
 
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.fillMaxHeight()
-            ) {
-                items(entriesData?: emptyList()){entrybox:EntryBox->
-                    if(entrybox.title.uppercase().contains(searchFilter.uppercase()) ||
-                        entrybox.entry.uppercase().contains(searchFilter.uppercase())) {
-                        OneEntryBox(
-                            entrybox.title,
-                            entrybox.time,
-                            entrybox.current_date,
-                            entrybox.tags_list,
-                            entrybox.entry,
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.fillMaxHeight()
+                ) {
+                    items(entriesData ?: emptyList()) { entrybox: EntryBox ->
+                        if (entrybox.title.uppercase().contains(searchFilter.uppercase()) ||
+                            entrybox.entry.uppercase().contains(searchFilter.uppercase())
+                        ) {
+                            OneEntryBox(
+                                entrybox.title,
+                                entrybox.time,
+                                entrybox.current_date,
+                                entrybox.tags_list,
+                                entrybox.entry,
 //                            { toEntryDetail(uid) }
-                            { toEntryDetail(0.toString()) }
-                        )
+                                { toEntryDetail(0.toString()) }
+                            )
+                        }
                     }
                 }
             }

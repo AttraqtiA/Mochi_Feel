@@ -75,10 +75,11 @@ fun ViewNewEntry(
     viewModel: NewEntryViewModel = hiltViewModel()
 ){
 
-    val selectedTags = viewModel.selectedTags
+
 //    viewModel:NewEntryViewModel = hiltViewModel()
     viewModel.initiate()
     val userData by viewModel.userData.collectAsState()
+    var selectedTags by remember { mutableStateOf(viewModel.selectedTags) }
 
     val makeTag = remember { mutableStateOf(false) }
     val makeEntry = remember { mutableStateOf(false) }
@@ -219,15 +220,16 @@ fun ViewNewEntry(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                         content = {
-                            items(tagsList){tag:Tag ->
+//                            items(tagsList){tag:Tag ->
+                            items(userData?.tags.orEmpty()) { tag: Tag ->
                                 Text(text = tag.name,
                                     style = if(tag in selectedTags)tagSelectedText else tagUnselectedText,
                                     modifier = if(tag in selectedTags){
                                         tagSelectedModifier
-                                            .clickable { viewModel.unselectTag(tag) }
+                                            .clickable { selectedTags.remove(tag) }
                                     } else {
                                         tagUnselectedModifier
-                                            .clickable { viewModel.selectTag(tag) }
+                                            .clickable { selectedTags.add(tag) }
                                            },
                                 )
                             }
@@ -265,10 +267,10 @@ fun ViewNewEntry(
                                     style = if(tag in selectedTags)tagSelectedText else tagUnselectedText,
                                     modifier = if(tag in selectedTags){
                                         tagSelectedModifier
-                                            .clickable { viewModel.unselectTag(tag) }
+                                            .clickable { selectedTags.remove(tag) }
                                     } else {
                                         tagUnselectedModifier
-                                            .clickable { viewModel.selectTag(tag) }
+                                            .clickable { selectedTags.add(tag) }
                                     },
                                 )
                             }
