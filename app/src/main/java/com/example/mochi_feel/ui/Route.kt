@@ -161,8 +161,7 @@ fun MochiFeelRoute() {
             composable(
                 MochiFeel_Screen.Intro1.name,
             ) {
-                musicViewModel.initializeMediaPlayer(context, Music("Full Focus", "Mochi Feel", R.raw.improve_focus)) // set default music
-                musicViewModel.startMusic()
+                musicViewModel.playPauseToggle(Music("Feels Like Autumn", "Mochi Feel", R.raw.feels_like_autumn), context)
 
                 canNavigateBack = false
                 ViewIntro1 { navController.navigate(MochiFeel_Screen.Intro2.name) }
@@ -208,7 +207,9 @@ fun MochiFeelRoute() {
             composable(MochiFeel_Screen.Home.name) {
                 canNavigateBack = true
                 HomeView(
-                    { navController.navigate(MochiFeel_Screen.NewEntry.name) }
+                    { navController.navigate(MochiFeel_Screen.NewEntry.name) },
+                    { navController.navigate(MochiFeel_Screen.EntryDetail.name+"/"+"ini uid") } //uid
+
                 )
             }
             composable(MochiFeel_Screen.Profile.name) {
@@ -223,7 +224,8 @@ fun MochiFeelRoute() {
                 canNavigateBack = true
                 ViewEntry(
 //                    val uid: Int = 0,
-                    { navController.navigate(MochiFeel_Screen.EntryDetail.name+"/"+"ini uid") } //uid
+//                    { navController.navigate("${MochiFeel_Screen.EntryDetail.name}/$uid") }
+                    { navController.navigate("${MochiFeel_Screen.EntryDetail.name}/$0") }
                 )
             }
 

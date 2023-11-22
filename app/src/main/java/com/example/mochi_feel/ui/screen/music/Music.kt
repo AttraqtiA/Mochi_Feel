@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -31,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mochi_feel.R
 import com.example.mochi_feel.model.Music
+import com.example.mochi_feel.ui.theme.CalmGreen
 import com.example.mochi_feel.ui.theme.inter
 
 @Composable
@@ -55,13 +57,13 @@ fun MusicView(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         item(content = {
-            Row (
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(24.dp),
                 horizontalArrangement = Arrangement.Center, // Center horizontally
                 verticalAlignment = Alignment.CenterVertically
-            ){
+            ) {
                 Text(
                     text = "Playlist",
                     style = TextStyle(
@@ -77,52 +79,62 @@ fun MusicView(
                         .fillMaxWidth()
                         .padding(start = 32.dp)
                 )
-                Image(
-                    painter = painterResource(id = R.drawable.sound_off),
-                    contentDescription = "image description",
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier
-                        .width(32.dp)
-                        .height(32.dp)
-                )
+//                Image(
+//                    painter = painterResource(id = R.drawable.sound_off),
+//                    contentDescription = "image description",
+//                    contentScale = ContentScale.Fit,
+//                    modifier = Modifier
+//                        .width(32.dp)
+//                        .height(32.dp)
+//                )
             }
         })
 
         items(musicViewModel.getMusicList()) { music: Music ->
-            // Use 'index' if needed, and 'music' represents the current Music object
-            if (music == musicViewModel.getCurrentMusic()) {
-                ActiveMusic(music, context)
-            } else {
-                NotActiveMusic(music, context)
-            }
+            MusicBar(music, context, musicViewModel)
         }
-
-
 
     }
 }
 
 @Composable
-fun ActiveMusic(music: Music, context: Context) {
-    Row (
+fun MusicBar(
+    music: Music, context: Context, musicViewModel: MusicViewModel
+) {
+    var selectedMusic = musicViewModel.selectedMusic.value
+
+    val color_background = if (selectedMusic == music) {
+        CalmGreen
+    } else {
+        Color.White
+    }
+
+    val color_text = if (selectedMusic == music) {
+        Color.White
+    } else {
+        CalmGreen
+    }
+
+    val play_or_pause = if (musicViewModel.isPlaying()) {
+        R.drawable.pause_button
+    } else {
+        R.drawable.play_button
+    }
+
+    Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(color = Color(0xFF238A91))
-            .padding(horizontal = 32.dp, vertical = 16.dp)
             .clickable(
                 onClick = {
-                    if (MusicViewModel().isPlaying() && music == MusicViewModel().getCurrentMusic()) {
-                        MusicViewModel().pauseMusic()
-                    } else if (MusicViewModel().isPlaying() && music != MusicViewModel().getCurrentMusic()) {
-                        MusicViewModel().initializeMediaPlayer(context, music)
-                    } else {
-                        MusicViewModel().initializeMediaPlayer(context, music)
-                    }
+//                    Log.d("music123", (music == MusicViewModel().getCurrentMusic()).toString())
+                    musicViewModel.playPauseToggle(music, context)
                 }
-            ),
+            )
+            .background(color = color_background)
+            .padding(horizontal = 32.dp, vertical = 16.dp),
         verticalAlignment = Alignment.CenterVertically
-    ){
-        Column (
+    ) {
+        Column(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth(),
@@ -135,7 +147,7 @@ fun ActiveMusic(music: Music, context: Context) {
                     lineHeight = 21.sp,
                     fontFamily = inter,
                     fontWeight = FontWeight(600),
-                    color = Color.White,
+                    color = color_text,
                 )
             )
             Text(
@@ -145,86 +157,27 @@ fun ActiveMusic(music: Music, context: Context) {
                     lineHeight = 21.sp,
                     fontFamily = inter,
                     fontWeight = FontWeight(400),
-                    color = Color.White,
+                    color = color_text,
                 )
             )
         }
-        Row (
+        Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .width(4.dp)
                 .height(16.dp)
-        ){
-            Image(
-                painter = painterResource(id = R.drawable.dots_white),
-                contentDescription = "image description",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize()
-            )
-        }
-    }
-}
-@Composable
-fun NotActiveMusic(music: Music, context: Context) {
-    Row (
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 32.dp, vertical = 16.dp)
-            .clickable(
-                onClick = {
-                    if (MusicViewModel().isPlaying() && music == MusicViewModel().getCurrentMusic()) {
-                        MusicViewModel().pauseMusic()
-                    } else if (MusicViewModel().isPlaying() && music != MusicViewModel().getCurrentMusic()) {
-                        MusicViewModel().initializeMediaPlayer(context, music)
-                    } else {
-                        MusicViewModel().initializeMediaPlayer(context, music)
-                    }
-                }
-            ),
-        verticalAlignment = Alignment.CenterVertically
-    ){
-        Column (
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth(),
-            verticalArrangement = Arrangement.Center
         ) {
-            Text(
-                text = music.title,
-                style = TextStyle(
-                    fontSize = 16.sp,
-                    lineHeight = 21.sp,
-                    fontFamily = inter,
-                    fontWeight = FontWeight(600),
-                    color = Color(0xFF238A91),
-                )
-            )
-            Text(
-                text = music.artist,
-                style = TextStyle(
-                    fontSize = 14.sp,
-                    lineHeight = 21.sp,
-                    fontFamily = inter,
-                    fontWeight = FontWeight(400),
-                    color = Color(0xFF238A91),
-                )
-            )
-        }
-        Row (
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .width(4.dp)
-                .height(16.dp)
-        ){
             Image(
-                painter = painterResource(id = R.drawable.dots_green),
+                painter = painterResource(id = play_or_pause),
                 contentDescription = "image description",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
+                    .size(32.dp)
             )
         }
     }
 }
+
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun MusicPreview() {

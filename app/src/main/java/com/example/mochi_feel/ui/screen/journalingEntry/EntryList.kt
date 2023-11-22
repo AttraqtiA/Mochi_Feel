@@ -44,10 +44,12 @@ import com.example.mochi_feel.viewmodel.Journaling_Entry.EntryListViewModel
 @Composable
 fun ViewEntry(
 //    uid: Int,
-    toEntryDetail: () -> Unit,
+    toEntryDetail: (uid:String) -> Unit,
     viewModel: EntryListViewModel = hiltViewModel()
 ) {
     viewModel.initiate()
+
+    val userData by viewModel.userData.collectAsState()
     val entriesData by viewModel.entriesData.collectAsState()
 
     var sortAscend by remember { mutableStateOf(false) }
@@ -226,7 +228,8 @@ fun ViewEntry(
                             entrybox.current_date,
                             entrybox.tags_list,
                             entrybox.entry,
-                            toEntryDetail
+//                            { toEntryDetail(uid) }
+                            { toEntryDetail(0.toString()) }
                         )
                     }
                 }

@@ -7,16 +7,16 @@
         android:name=".MochiFeelApp"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:icon="@drawable/profilepage"
+        android:label="Mochi Feel"
+        android:roundIcon="@drawable/profilepage"
         android:supportsRtl="true"
         android:theme="@style/Theme.Mochi_Feel"
         tools:targetApi="31">
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
+            android:label="Mochi Feel"
             android:theme="@style/Theme.Mochi_Feel">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -19,6 +19,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -50,6 +52,8 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
@@ -77,6 +81,8 @@ fun SignUpView(
     var birth_year by rememberSaveable { mutableStateOf("") }
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
+
+    var passwordVisibility by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
     val state = viewModel.signUpState.collectAsState(initial = null)
@@ -314,7 +320,7 @@ fun SignUpView(
                 )
             },
             keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Text,
+                keyboardType = KeyboardType.Email,
                 imeAction = ImeAction.Next
             ),
             modifier = Modifier
@@ -333,6 +339,7 @@ fun SignUpView(
                 textColor = Color(0xFF238A91)
             )
         )
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -377,6 +384,7 @@ fun SignUpView(
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done
             ),
+            visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
             modifier = Modifier
                 .border(
                     width = 1.dp,
@@ -391,7 +399,19 @@ fun SignUpView(
                 focusedBorderColor = Color.Transparent,
                 cursorColor = Color(0xFF238A91),
                 textColor = Color(0xFF238A91)
-            )
+            ),
+            trailingIcon = {
+                IconButton(
+                    onClick = { passwordVisibility = !passwordVisibility },
+                    modifier = Modifier.padding(8.dp)
+                ) {
+                    Icon(
+                        imageVector = if (passwordVisibility) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                        contentDescription = "Toggle password visibility",
+                        tint = Color.Gray
+                    )
+                }
+            }
         )
         Row(
             modifier = Modifier.padding(start = 10.dp, top = 20.dp, bottom = 20.dp, end = 10.dp)
