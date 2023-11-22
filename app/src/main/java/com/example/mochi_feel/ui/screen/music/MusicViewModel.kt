@@ -8,7 +8,9 @@ import com.example.mochi_feel.model.Music
 
 class MusicViewModel : ViewModel() {
 
-    private var mediaPlayer: MediaPlayer? = null
+    companion object {
+        var mediaPlayer: MediaPlayer? = null
+    }
     private var currentMusic: Music? = null
 
     private val privateMusicList = mutableListOf(

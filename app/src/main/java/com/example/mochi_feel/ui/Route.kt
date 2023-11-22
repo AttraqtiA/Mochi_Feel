@@ -208,7 +208,9 @@ fun MochiFeelRoute() {
             composable(MochiFeel_Screen.Home.name) {
                 canNavigateBack = true
                 HomeView(
-                    { navController.navigate(MochiFeel_Screen.NewEntry.name) }
+                    { navController.navigate(MochiFeel_Screen.NewEntry.name) },
+                    { navController.navigate(MochiFeel_Screen.EntryDetail.name+"/"+"ini uid") } //uid
+
                 )
             }
             composable(MochiFeel_Screen.Profile.name) {

@@ -1,6 +1,7 @@
 package com.example.mochi_feel.ui.screen.music
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -111,11 +112,15 @@ fun ActiveMusic(music: Music, context: Context) {
             .padding(horizontal = 32.dp, vertical = 16.dp)
             .clickable(
                 onClick = {
+                    Log.d("music123", (music == MusicViewModel().getCurrentMusic()).toString())
                     if (MusicViewModel().isPlaying() && music == MusicViewModel().getCurrentMusic()) {
+                        Log.d("music123", "here1")
                         MusicViewModel().pauseMusic()
                     } else if (MusicViewModel().isPlaying() && music != MusicViewModel().getCurrentMusic()) {
+                        Log.d("music123", "here2")
                         MusicViewModel().initializeMediaPlayer(context, music)
                     } else {
+                        Log.d("music123", "here3")
                         MusicViewModel().initializeMediaPlayer(context, music)
                     }
                 }
