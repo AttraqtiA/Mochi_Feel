@@ -218,7 +218,8 @@ fun ViewEntry(
                 modifier = Modifier.fillMaxHeight()
             ) {
                 items(entriesData?: emptyList()){entrybox:EntryBox->
-                    if(entrybox.title.uppercase().contains(searchFilter.uppercase())) {
+                    if(entrybox.title.uppercase().contains(searchFilter.uppercase()) ||
+                        entrybox.entry.uppercase().contains(searchFilter.uppercase())) {
                         OneEntryBox(
                             entrybox.title,
                             entrybox.time,
