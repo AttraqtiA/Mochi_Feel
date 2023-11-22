@@ -1,6 +1,5 @@
-package com.example.mochi_feel.ui.screen.journalingEntry
+package com.example.mochi_feel.viewmodel.Journaling_Entry
 
-import android.icu.util.Calendar
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mochi_feel.data.AuthRepositoryImpl

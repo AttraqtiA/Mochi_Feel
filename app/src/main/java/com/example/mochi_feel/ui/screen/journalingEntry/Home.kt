@@ -56,7 +56,7 @@ fun HomeView(
     val entriesData by homeViewModel.entriesData.collectAsState()
     
     val variabel_UIState by homeViewModel.uiState.collectAsState()
-8
+
     val context = LocalContext.current
 
     LazyColumn(
