@@ -24,4 +24,12 @@ class NewEntryViewModel @Inject constructor(
             repository.addEntries(title, content, date, null)
         }
     }
+
+    fun addTag(
+        name:String
+    ) {
+        viewModelScope.launch {
+            repository.addTag(name)
+        }
+    }
 }

@@ -51,6 +51,9 @@ fun ViewEntry(
     val entriesData by viewModel.entriesData.collectAsState()
 
     var sortAscend by remember { mutableStateOf(false) }
+    if(sortAscend) {
+        viewModel.sortDateAscending()
+    }
     var searchFilter by remember { mutableStateOf("") }
 
     Column(
@@ -62,7 +65,7 @@ fun ViewEntry(
         Column(
             modifier = Modifier
                 .fillMaxWidth(0.9f)
-                .padding(top = 12.dp),
+                .padding(top = 20.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
 //            Header
@@ -131,7 +134,7 @@ fun ViewEntry(
                     maxLines = 1,
                     decorationBox = { innerTextField ->
                         Box(modifier = Modifier
-                            .fillMaxSize()
+                            .fillMaxWidth()
                             .padding(8.dp)) {
                             if (searchFilter.isEmpty()) {
                                 Text(text = "Search 'Title'",
@@ -214,15 +217,17 @@ fun ViewEntry(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.fillMaxHeight()
             ) {
-                items(entriesData ?: emptyList()) { entrybox: EntryBox ->
-                    OneEntryBox(
-                        entrybox.title,
-                        entrybox.time,
-                        entrybox.current_date,
-                        entrybox.tags_list,
-                        entrybox.entry,
-                        toEntryDetail
-                    )
+                items(entriesData?: emptyList()){entrybox:EntryBox->
+                    if(entrybox.title.uppercase().contains(searchFilter.uppercase())) {
+                        OneEntryBox(
+                            entrybox.title,
+                            entrybox.time,
+                            entrybox.current_date,
+                            entrybox.tags_list,
+                            entrybox.entry,
+                            toEntryDetail
+                        )
+                    }
                 }
             }
         }

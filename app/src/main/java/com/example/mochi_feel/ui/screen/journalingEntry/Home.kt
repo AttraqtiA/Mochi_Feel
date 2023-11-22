@@ -184,7 +184,8 @@ fun HomeView(
                 entrybox.time,
                 entrybox.current_date,
                 entrybox.tags_list,
-                entrybox.entry
+                entrybox.entry,
+                {  }
             )
         }
     }
