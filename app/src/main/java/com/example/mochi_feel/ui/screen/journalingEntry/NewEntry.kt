@@ -157,10 +157,20 @@ fun ViewNewEntry(
                         .clickable(
                             onClick = toBack
                         ))
-                BasicTextField(
-                    value = entryTitle,
-                    onValueChange = {entryTitle = it},
-                    textStyle = TextStyle(
+//                BasicTextField(
+//                    value = entryTitle,
+//                    onValueChange = {entryTitle = it},
+//                    textStyle = TextStyle(
+//                        fontSize = 20.sp,
+//                        lineHeight = 21.sp,
+//                        fontWeight = FontWeight(700),
+//                        color = Color(0xFF238A91),
+//                        textAlign = TextAlign.Center,
+//                    )
+//                )
+                Text(
+                    text = "New Entry",
+                    style = TextStyle(
                         fontSize = 20.sp,
                         lineHeight = 21.sp,
                         fontWeight = FontWeight(700),
@@ -168,7 +178,6 @@ fun ViewNewEntry(
                         textAlign = TextAlign.Center,
                     )
                 )
-
                 Icon(
                     painter = painterResource(id = R.drawable.baseline_save_24),
                     contentDescription = "save button",
