@@ -72,10 +72,13 @@ fun ViewNewEntry(
     saveNewEntry: () -> Unit,
     toHelpPage: () -> Unit,
     toBack: () -> Unit,
-    newEntryViewModel: NewEntryViewModel = hiltViewModel()
+    viewModel: NewEntryViewModel = hiltViewModel()
 ){
 
-    val selectedTags = newEntryViewModel.selectedTags
+    val selectedTags = viewModel.selectedTags
+//    viewModel:NewEntryViewModel = hiltViewModel()
+    viewModel.initiate()
+    val userData by viewModel.userData.collectAsState()
 
     val makeTag = remember { mutableStateOf(false) }
     val makeEntry = remember { mutableStateOf(false) }
@@ -250,8 +253,9 @@ fun ViewNewEntry(
                         modifier = Modifier.widthIn(0.dp, 250.dp),
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                         content = {
-                            items(tagsList){tag:Tag ->
-                                Text(text = tag.name,
+                            items(userData?.tags.orEmpty()) { tag: Tag ->
+                                Text(
+                                    text = tag.name,
                                     style = if(tag in selectedTags)tagSelectedText else tagUnselectedText,
                                     modifier = if(tag in selectedTags)tagSelectedModifier else tagUnselectedModifier
                                 )
@@ -458,6 +462,12 @@ fun ViewNewEntry(
                             onClick = {
 //                            make new tag here
                                 makeEntry.value = false
+                                viewModel.addEntries(
+                                    title = entryTitle,
+                                    content = entryContent,
+                                    date = Calendar.getInstance().time,
+                                    tagsList = tagsList
+                                )
                             },
                             enabled = entryTitle.isNotEmpty()
                         ) {
