@@ -31,6 +31,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.mochi_feel.R
+import com.example.mochi_feel.model.Music
 import com.example.mochi_feel.ui.screen.help.EmotionView
 import com.example.mochi_feel.ui.screen.help.HelpMainView
 import com.example.mochi_feel.ui.screen.help.RandomView
@@ -135,9 +136,11 @@ fun MochiFeelRoute() {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val navController = rememberNavController()
 
+    val context = LocalContext.current
     val musicViewModel = remember { MusicViewModel() }
 
-    val contextToast = LocalContext.current
+//    val musicViewModel: MusicViewModel by viewModels()
+
 //    var canNavigateBack by remember { mutableStateOf(navController.previousBackStackEntry != null) }
     var canNavigateBack by remember { mutableStateOf(false) }
 
@@ -158,6 +161,9 @@ fun MochiFeelRoute() {
             composable(
                 MochiFeel_Screen.Intro1.name,
             ) {
+                musicViewModel.initializeMediaPlayer(context, Music("Mochi Memory", "Mochi Feel", R.raw.matcha_mochi_cute)) // set default music
+                musicViewModel.startMusic()
+
                 canNavigateBack = false
                 ViewIntro1 { navController.navigate(MochiFeel_Screen.Intro2.name) }
             }

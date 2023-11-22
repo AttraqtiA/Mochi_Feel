@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -37,16 +38,108 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.mochi_feel.R
 import com.example.mochi_feel.model.EntryBox
+import com.example.mochi_feel.model.Tag
 import com.example.mochi_feel.ui.screen.components.OneEntryBox
 import com.example.mochi_feel.ui.theme.CalmGreen
 import com.example.mochi_feel.viewmodel.Journaling_Entry.EntryListViewModel
 
 @Composable
 fun ViewEntry(
-    viewModel: EntryListViewModel = hiltViewModel()
+//    viewModel: EntryListViewModel = hiltViewModel()
 ) {
-    viewModel.initiate()
-    val entriesData by viewModel.entriesData.collectAsState()
+//    viewModel.initiate()
+//    val entriesData by viewModel.entriesData.collectAsState()
+
+    val dummyData:MutableList<EntryBox> = mutableListOf(
+        EntryBox(
+            title = "Cake for breakfast",
+            entry = "This morning I came down for breakfast and found a huge strawberry cake on the counter...",
+            tags_list = mutableListOf(
+                Tag(name="lost hope"),
+                Tag(name="tired of life")
+            ),
+            time = "Current time"
+        ),
+        EntryBox(
+            title = "Pop pop pop",
+            entry = "This morning I came down for breakfast and found a huge strawberry cake on the counter...",
+            tags_list = mutableListOf(
+                Tag(name="lost hope"),
+                Tag(name="tired of life")
+            ),
+            time = "Current time"
+        ),
+        EntryBox(
+            title = "Pop pop pop #2",
+            entry = "This morning I came down for breakfast and found a huge strawberry cake on the counter...",
+            tags_list = mutableListOf(
+                Tag(name="lost hope"),
+                Tag(name="tired of life")
+            ),
+            time = "Current time"
+        ),
+        EntryBox(
+            title = "Cake for Lunch",
+            entry = "This morning I came down for breakfast and found a huge strawberry cake on the counter...",
+            tags_list = mutableListOf(
+                Tag(name="lost hope"),
+                Tag(name="tired of life")
+            ),
+            time = "Current time"
+        ),
+        EntryBox(
+            title = "Cake for Dinner",
+            entry = "This morning I came down for breakfast and found a huge strawberry cake on the counter...",
+            tags_list = mutableListOf(
+                Tag(name="lost hope"),
+                Tag(name="tired of life")
+            ),
+            time = "Current time"
+        ),
+    )
+
+    val tagsList:MutableList<Tag> = mutableListOf(
+        Tag(name = "yes"),
+        Tag(name = "rant"),
+        Tag(name = "yes2"),
+        Tag(name = "yes3"),
+        Tag(name = "yes4"),
+        Tag(name = "tag name thts too long"),
+    )
+
+    val tagSelectedText = TextStyle(
+        fontSize = 12.sp,
+        fontWeight = FontWeight(700),
+        color = Color(0xFFEDEDED),
+    )
+    val tagSelectedModifier = Modifier
+        .background(
+            color = CalmGreen,
+            shape = RoundedCornerShape(size = 5.dp)
+        )
+        .padding(
+            start = 5.dp,
+            top = 2.dp,
+            end = 5.dp,
+            bottom = 2.dp
+        )
+
+    val tagUnselectedText = TextStyle(
+        fontSize = 12.sp,
+        fontWeight = FontWeight(700),
+        color = CalmGreen,
+    )
+    val tagUnselectedModifier = Modifier
+        .background(
+            color = Color(0xFFEDEDED),
+            shape = RoundedCornerShape(size = 5.dp)
+        )
+        .padding(
+            start = 5.dp,
+            top = 2.dp,
+            end = 5.dp,
+            bottom = 2.dp
+        )
 
     var sortAscend by remember { mutableStateOf(false) }
     var searchFilter by remember { mutableStateOf("") }
@@ -61,7 +154,7 @@ fun ViewEntry(
             modifier = Modifier
                 .fillMaxWidth(0.9f)
                 .padding(top = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
 //            Header
             Row(
@@ -119,7 +212,7 @@ fun ViewEntry(
                     painter = painterResource(id = R.drawable.baseline_search_24),
                     contentDescription = "Search",
                     tint = CalmGreen,
-                    modifier = Modifier.padding(4.dp)
+                    modifier = Modifier.padding(start = 8.dp)
                 )
 
                 BasicTextField(
@@ -129,8 +222,8 @@ fun ViewEntry(
                     maxLines = 1,
                     decorationBox = { innerTextField ->
                         Box(modifier = Modifier
-//                            .fillMaxSize()
-                            .padding(8.dp)) {
+                            .fillMaxWidth()
+                            .padding(4.dp)) {
                             if (searchFilter.isEmpty()) {
                                 Text(text = "Search 'Title'",
                                     style = TextStyle(
@@ -161,65 +254,48 @@ fun ViewEntry(
                         )
                 )
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.padding(top = 4.dp)
                 ) {
-                    Text(
-                        text = "Tag1",
-                        style = TextStyle(
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight(700),
-                            color = Color(0xFFFFFFFF),
-                        ),
-                        modifier = Modifier
-                            .background(
-                                color = Color(0xFF238A91),
-                                shape = RoundedCornerShape(size = 5.dp)
-                            )
-                            .padding(start = 5.dp, top = 2.dp, end = 5.dp, bottom = 2.dp)
-                    )
-                    Text(
-                        text = "Tag2",
-                        style = TextStyle(
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight(700),
-                            color = Color(0xFF238A91),
-                        ),
-                        modifier = Modifier
-                            .background(
-                                color = Color(0xFFEDEDED),
-                                shape = RoundedCornerShape(size = 5.dp)
-                            )
-                            .padding(start = 5.dp, top = 2.dp, end = 5.dp, bottom = 2.dp)
-                    )
-                    Text(
-                        text = "And so on",
-                        style = TextStyle(
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight(700),
-                            color = Color(0xFF238A91),
-                        ),
-                        modifier = Modifier
-                            .background(
-                                color = Color(0xFFEDEDED),
-                                shape = RoundedCornerShape(size = 5.dp)
-                            )
-                            .padding(start = 5.dp, top = 2.dp, end = 5.dp, bottom = 2.dp)
+                    LazyRow(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        content = {
+                            items(tagsList){tag:Tag ->
+                                Text(text = tag.name,
+                                    style = tagUnselectedText,
+                                    modifier = tagUnselectedModifier
+                                )
+                            }
+                        }
                     )
                 }
             }
 
             LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.fillMaxHeight()
+//                verticalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.fillMaxSize()
             ) {
-                items(entriesData ?: emptyList()) { entrybox: EntryBox ->
-                    OneEntryBox(
-                        entrybox.title,
-                        entrybox.time,
-                        entrybox.getEntryBoxDate(),
-                        entrybox.tags_list,
-                        entrybox.entry
-                    )
+//                items(entriesData ?: emptyList()) { e\ntrybox: EntryBox ->
+//                    OneEntryBox(
+//                        entrybox.title,
+//                        entrybox.time,
+//                        entrybox.getEntryBoxDate(),
+//                        entrybox.tags_list,
+//                        entrybox.entry
+//                    )
+//                }
+
+                items(dummyData){entrybox:EntryBox->
+                    if(entrybox.title.uppercase().contains(searchFilter.uppercase())){
+                        OneEntryBox(
+                            entrybox.title,
+                            entrybox.time,
+                            entrybox.getEntryBoxDate(),
+                            entrybox.tags_list,
+                            entrybox.entry
+                        )
+                    }
                 }
             }
         }

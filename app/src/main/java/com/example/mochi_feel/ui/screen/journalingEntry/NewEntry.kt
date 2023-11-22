@@ -28,6 +28,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -55,6 +56,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.mochi_feel.R
 import com.example.mochi_feel.model.Tag
@@ -336,22 +338,21 @@ fun ViewNewEntry(
                 modifier = Modifier
                     .height(500.dp)
                     .fillMaxWidth(0.95f)
-                    .padding(8.dp)
-                    .border(width = 0.1.dp, color = CalmGreen, shape = RoundedCornerShape(10.dp)),
+                    .padding(8.dp),
 
             ) {
-                FloatingActionButton(
+                Button(
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
                         .offset(x = 8.dp, y = 8.dp)
-                        .animateContentSize()
-                        .shadow(0.dp, shape = MaterialTheme.shapes.medium),
+                        .animateContentSize(),
+//                    elevation = FloatingActionButtonDefaults.elevation(0.dp),
                     onClick = { if(canAdd){
                         /*TODO*/
 //                        insert function to add new entry here
                     } },
-                    containerColor = CalmGreenLight,
-                    contentColor = CalmGreenLight,
+//                    containerColor = CalmGreenLight,
+//                    contentColor = CalmGreenLight,
                     shape = RoundedCornerShape(10.dp),
                 ) {
                         Text(
@@ -362,7 +363,10 @@ fun ViewNewEntry(
                                 .animateContentSize()
                         )
                 }
-
+                Box(modifier = Modifier
+                    .zIndex(-1.0f)
+                    .fillMaxSize()
+                    .border(width = 0.1.dp, color = CalmGreen, shape = RoundedCornerShape(10.dp)))
                 BasicTextField(
                     value = entryContent,
                     onValueChange = { entryContent = it },
@@ -386,7 +390,7 @@ fun ViewNewEntry(
                                         fontWeight = FontWeight(600),
                                         color = CalmGreen,
                                     ),
-                                    modifier = Modifier.alpha(0.6f)
+//                                    modifier = Modifier.alpha(0.6f)
                                 )
                             }
                             innerTextField()  //<-- Add this
@@ -409,7 +413,7 @@ fun ViewNewEntry(
                             placeholder = {
                                 Text(
                                     text = "e.g. 'daily rant'",
-                                    modifier = Modifier.alpha(0.8f)
+//                                    modifier = Modifier.alpha(0.8f)
                                 )
                             }
                         )
