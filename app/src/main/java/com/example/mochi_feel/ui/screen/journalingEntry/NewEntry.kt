@@ -72,9 +72,10 @@ fun ViewNewEntry(
     saveNewEntry: () -> Unit,
     toHelpPage: () -> Unit,
     toBack: () -> Unit,
-//    newEntryViewModel: NewEntryViewModel = hiltViewModel()
+    newEntryViewModel: NewEntryViewModel = hiltViewModel()
 ){
-//    val entriesData by newEntryViewModel.entriesData.collectAsState()
+
+    val selectedTags = newEntryViewModel.selectedTags
 
     val makeTag = remember { mutableStateOf(false) }
     val makeEntry = remember { mutableStateOf(false) }
@@ -157,17 +158,6 @@ fun ViewNewEntry(
                         .clickable(
                             onClick = toBack
                         ))
-//                BasicTextField(
-//                    value = entryTitle,
-//                    onValueChange = {entryTitle = it},
-//                    textStyle = TextStyle(
-//                        fontSize = 20.sp,
-//                        lineHeight = 21.sp,
-//                        fontWeight = FontWeight(700),
-//                        color = Color(0xFF238A91),
-//                        textAlign = TextAlign.Center,
-//                    )
-//                )
                 Text(
                     text = "New Entry",
                     style = TextStyle(
@@ -262,8 +252,8 @@ fun ViewNewEntry(
                         content = {
                             items(tagsList){tag:Tag ->
                                 Text(text = tag.name,
-                                    style = tagSelectedText,
-                                    modifier = tagSelectedModifier
+                                    style = if(tag in selectedTags)tagSelectedText else tagUnselectedText,
+                                    modifier = if(tag in selectedTags)tagSelectedModifier else tagUnselectedModifier
                                 )
                             }
                         }

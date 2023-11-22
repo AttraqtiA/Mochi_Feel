@@ -1,10 +1,12 @@
 package com.example.mochi_feel.ui.screen.journalingEntry
 
+import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mochi_feel.data.AuthRepositoryImpl
 import com.example.mochi_feel.model.Tag
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.util.Date
 import javax.inject.Inject
@@ -13,6 +15,10 @@ import javax.inject.Inject
 class NewEntryViewModel @Inject constructor(
     private val repository: AuthRepositoryImpl
 ) : ViewModel() {
+
+    private val _selectedTags : MutableList<Tag> = mutableListOf()
+    val selectedTags = _selectedTags
+
     fun addEntries(
         title: String,
         content: String,
@@ -31,5 +37,13 @@ class NewEntryViewModel @Inject constructor(
         viewModelScope.launch {
             repository.addTag(name)
         }
+    }
+
+    fun selectTag(tag: Tag){
+        _selectedTags.add(tag)
+    }
+
+    fun unselectTag(tag: Tag){
+        _selectedTags.remove(tag)
     }
 }
