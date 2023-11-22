@@ -1,6 +1,7 @@
 package com.example.mochi_feel.ui.screen.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,7 +27,8 @@ fun OneEntryBox(
     time: String,
     current_date: Date?,
     tags_list: MutableList<Tag>,
-    entry: String
+    entry: String,
+    toEntryDetail: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -34,6 +36,9 @@ fun OneEntryBox(
             .padding(bottom = 24.dp)
             .background(color = CalmGreen, shape = RoundedCornerShape(size = 10.dp))
             .padding(16.dp)
+            .clickable(
+                onClick = toEntryDetail
+            )
     ) {
         Text(
             text = title,

@@ -1,5 +1,6 @@
 package com.example.mochi_feel.ui.screen.music
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -90,9 +91,9 @@ fun MusicView(
         items(musicViewModel.getMusicList()) { music: Music ->
             // Use 'index' if needed, and 'music' represents the current Music object
             if (music == musicViewModel.getCurrentMusic()) {
-                ActiveMusic(music = music)
+                ActiveMusic(music, context)
             } else {
-                NotActiveMusic(music = music)
+                NotActiveMusic(music, context)
             }
         }
 
@@ -102,7 +103,7 @@ fun MusicView(
 }
 
 @Composable
-fun ActiveMusic(music: Music) {
+fun ActiveMusic(music: Music, context: Context) {
     Row (
         modifier = Modifier
             .fillMaxWidth()
@@ -110,8 +111,12 @@ fun ActiveMusic(music: Music) {
             .padding(horizontal = 32.dp, vertical = 16.dp)
             .clickable(
                 onClick = {
-                    if (MusicViewModel().isPlaying()) {
+                    if (MusicViewModel().isPlaying() && music == MusicViewModel().getCurrentMusic()) {
                         MusicViewModel().pauseMusic()
+                    } else if (MusicViewModel().isPlaying() && music != MusicViewModel().getCurrentMusic()) {
+                        MusicViewModel().initializeMediaPlayer(context, music)
+                    } else {
+                        MusicViewModel().initializeMediaPlayer(context, music)
                     }
                 }
             ),
@@ -160,15 +165,19 @@ fun ActiveMusic(music: Music) {
     }
 }
 @Composable
-fun NotActiveMusic(music: Music) {
+fun NotActiveMusic(music: Music, context: Context) {
     Row (
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 32.dp, vertical = 16.dp)
             .clickable(
                 onClick = {
-                    if (MusicViewModel().isPlaying()) {
+                    if (MusicViewModel().isPlaying() && music == MusicViewModel().getCurrentMusic()) {
                         MusicViewModel().pauseMusic()
+                    } else if (MusicViewModel().isPlaying() && music != MusicViewModel().getCurrentMusic()) {
+                        MusicViewModel().initializeMediaPlayer(context, music)
+                    } else {
+                        MusicViewModel().initializeMediaPlayer(context, music)
                     }
                 }
             ),
