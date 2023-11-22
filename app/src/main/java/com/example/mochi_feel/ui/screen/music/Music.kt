@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -34,6 +36,8 @@ import com.example.mochi_feel.ui.theme.inter
 fun MusicView(
     musicViewModel: MusicViewModel
 ) {
+//    val musicViewModel = remember { MusicViewModel() }
+
     val context = LocalContext.current
 
     // Initialize the media player when the composable is first composed
@@ -43,53 +47,57 @@ fun MusicView(
             musicViewModel.stopMusic()
         }
     }
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .background(color = Color.White),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Row (
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(24.dp),
-            horizontalArrangement = Arrangement.Center, // Center horizontally
-            verticalAlignment = Alignment.CenterVertically
-        ){
-            Text(
-                text = "Playlist",
-                style = TextStyle(
-                    fontSize = 20.sp,
-                    lineHeight = 21.sp,
-                    fontFamily = inter,
-                    fontWeight = FontWeight(700),
-                    color = Color(0xFF238A91),
-                    textAlign = TextAlign.Center,
-                ),
+        item(content = {
+            Row (
                 modifier = Modifier
-                    .weight(1f)
                     .fillMaxWidth()
-                    .padding(start = 32.dp)
-            )
-            Image(
-                painter = painterResource(id = R.drawable.sound_off),
-                contentDescription = "image description",
-                contentScale = ContentScale.Fit,
-                modifier = Modifier
-                    .width(32.dp)
-                    .height(32.dp)
-            )
+                    .padding(24.dp),
+                horizontalArrangement = Arrangement.Center, // Center horizontally
+                verticalAlignment = Alignment.CenterVertically
+            ){
+                Text(
+                    text = "Playlist",
+                    style = TextStyle(
+                        fontSize = 20.sp,
+                        lineHeight = 21.sp,
+                        fontFamily = inter,
+                        fontWeight = FontWeight(700),
+                        color = Color(0xFF238A91),
+                        textAlign = TextAlign.Center,
+                    ),
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                        .padding(start = 32.dp)
+                )
+                Image(
+                    painter = painterResource(id = R.drawable.sound_off),
+                    contentDescription = "image description",
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier
+                        .width(32.dp)
+                        .height(32.dp)
+                )
+            }
+        })
+
+        items(musicViewModel.getMusicList()) { music: Music ->
+            // Use 'index' if needed, and 'music' represents the current Music object
+            if (music == musicViewModel.getCurrentMusic()) {
+                ActiveMusic(music = music)
+            } else {
+                NotActiveMusic(music = music)
+            }
         }
 
 
-        ActiveMusic(Music("Halo", "Nyahalo", R.raw.matcha_mochi_cute))
-        NotActiveMusic(Music("Halo", "Nyahalo", R.raw.matcha_mochi_cute))
 
-//        LazyColumn {
-//            items() {
-//
-//            }
-//        }
     }
 }
 
@@ -101,7 +109,11 @@ fun ActiveMusic(music: Music) {
             .background(color = Color(0xFF238A91))
             .padding(horizontal = 32.dp, vertical = 16.dp)
             .clickable(
-                onClick = { MusicViewModel().stopMusic() }
+                onClick = {
+                    if (MusicViewModel().isPlaying()) {
+                        MusicViewModel().pauseMusic()
+                    }
+                }
             ),
         verticalAlignment = Alignment.CenterVertically
     ){
@@ -152,7 +164,14 @@ fun NotActiveMusic(music: Music) {
     Row (
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 32.dp, vertical = 16.dp),
+            .padding(horizontal = 32.dp, vertical = 16.dp)
+            .clickable(
+                onClick = {
+                    if (MusicViewModel().isPlaying()) {
+                        MusicViewModel().pauseMusic()
+                    }
+                }
+            ),
         verticalAlignment = Alignment.CenterVertically
     ){
         Column (
