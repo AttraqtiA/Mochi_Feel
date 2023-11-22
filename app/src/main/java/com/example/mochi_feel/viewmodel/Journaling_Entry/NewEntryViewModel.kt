@@ -1,6 +1,7 @@
 package com.example.mochi_feel.viewmodel.Journaling_Entry
 
 import android.icu.util.Calendar
+import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import com.example.mochi_feel.data.AuthRepositoryImpl
 import com.example.mochi_feel.model.EntryBox
@@ -8,6 +9,8 @@ import com.example.mochi_feel.model.Tag
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import java.util.Date
 import javax.inject.Inject
 
@@ -17,13 +20,26 @@ class NewEntryViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _entriesData = MutableStateFlow<MutableList<EntryBox>?>(null)
+    private val _tagSelected = MutableStateFlow<MutableList<Tag>>(mutableListOf())
 
     val entriesData : StateFlow<MutableList<EntryBox>?> = _entriesData
+    val tagSelected : StateFlow<MutableList<Tag>> = _tagSelected.asStateFlow()
 
-}
-
-fun addNewEntry(title: String, content:String, tags: MutableList<Tag>){
+    fun addNewEntry(title: String, content:String, tags: MutableList<Tag>){
 //    add and push it into the database here i guess
+    }
+
+    fun addNewTag(name: String){
+//    make new tag with this name
+    }
+
+    fun selectTag(tag: Tag){
+
+    }
+
+    fun unselectTag(tag: Tag){
+
+    }
 }
 
 fun Date?.isSameDayAs(other: Date?): Boolean {

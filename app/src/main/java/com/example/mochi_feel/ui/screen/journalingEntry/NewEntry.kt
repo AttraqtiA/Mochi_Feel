@@ -22,13 +22,16 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
@@ -59,6 +62,7 @@ import com.example.mochi_feel.ui.theme.CalmGreenLight
 import com.example.mochi_feel.viewmodel.Journaling_Entry.HomeViewModel
 import com.example.mochi_feel.viewmodel.Journaling_Entry.NewEntryViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("RememberReturnType")
 @Composable
 fun ViewNewEntry(
@@ -73,6 +77,7 @@ fun ViewNewEntry(
 
     var entryContent by remember { mutableStateOf("") }
     var entryTitle by remember { mutableStateOf("New Entry") }
+    var newTagName by remember { mutableStateOf("") }
 
     val canAdd:Boolean = entryContent.isNotEmpty()
 
@@ -85,6 +90,39 @@ fun ViewNewEntry(
         Tag(name = "tag name thts too long"),
     )
 
+    val tagSelectedText = TextStyle(
+        fontSize = 12.sp,
+        fontWeight = FontWeight(700),
+        color = Color(0xFFEDEDED),
+    )
+    val tagSelectedModifier = Modifier
+        .background(
+            color = CalmGreen,
+            shape = RoundedCornerShape(size = 5.dp)
+        )
+        .padding(
+            start = 5.dp,
+            top = 2.dp,
+            end = 5.dp,
+            bottom = 2.dp
+        )
+
+    val tagUnselectedText = TextStyle(
+        fontSize = 12.sp,
+        fontWeight = FontWeight(700),
+        color = CalmGreen,
+        )
+    val tagUnselectedModifier = Modifier
+        .background(
+            color = Color(0xFFEDEDED),
+            shape = RoundedCornerShape(size = 5.dp)
+        )
+        .padding(
+            start = 5.dp,
+            top = 2.dp,
+            end = 5.dp,
+            bottom = 2.dp
+        )
 
     Column(
         modifier = Modifier
@@ -172,45 +210,17 @@ fun ViewNewEntry(
                     modifier = Modifier.padding(top = 4.dp)
                 ) {
                     LazyRow(
-                        modifier = Modifier.widthIn(0.dp, 350.dp),
+                        modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                         content = {
                             items(tagsList){tag:Tag ->
                                 Text(text = tag.name,
-                                    style = TextStyle(
-                                        fontSize = 12.sp,
-                                        fontWeight = FontWeight(700),
-                                        color = Color(0xFFFFFFFF),
-                                    ),
-                                    modifier = Modifier
-                                        .background(
-                                            color = Color(0xFF238A91),
-                                            shape = RoundedCornerShape(size = 5.dp)
-                                        )
-                                        .padding(
-                                            start = 5.dp,
-                                            top = 2.dp,
-                                            end = 5.dp,
-                                            bottom = 2.dp
-                                        )
+                                    style = tagUnselectedText,
+                                    modifier = tagUnselectedModifier
                                 )
                             }
                         }
                     )
-
-                    Text(text = "And so on",
-                        style = TextStyle(
-                            fontSize = 12.sp,
-//                            fontFamily = FontFamily(Font(R.font.inter)),
-                            fontWeight = FontWeight(700),
-                            color = Color(0xFF238A91),
-                        ),
-                        modifier = Modifier
-                            .background(
-                                color = Color(0xFFEDEDED),
-                                shape = RoundedCornerShape(size = 5.dp)
-                            )
-                            .padding(start = 5.dp, top = 2.dp, end = 5.dp, bottom = 2.dp))
                 }
             }
 
@@ -234,27 +244,13 @@ fun ViewNewEntry(
                     modifier = Modifier.padding(top = 4.dp)
                 ) {
                     LazyRow(
-                        modifier = Modifier.widthIn(0.dp, 350.dp),
+                        modifier = Modifier.widthIn(0.dp, 250.dp),
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                         content = {
                             items(tagsList){tag:Tag ->
                                 Text(text = tag.name,
-                                    style = TextStyle(
-                                        fontSize = 12.sp,
-                                        fontWeight = FontWeight(700),
-                                        color = Color(0xFFFFFFFF),
-                                    ),
-                                    modifier = Modifier
-                                        .background(
-                                            color = Color(0xFF238A91),
-                                            shape = RoundedCornerShape(size = 5.dp)
-                                        )
-                                        .padding(
-                                            start = 5.dp,
-                                            top = 2.dp,
-                                            end = 5.dp,
-                                            bottom = 2.dp
-                                        )
+                                    style = tagSelectedText,
+                                    modifier = tagSelectedModifier
                                 )
                             }
                         }
@@ -396,6 +392,44 @@ fun ViewNewEntry(
                     }
                 )
 
+            }
+
+            if(makeTag.value){
+                AlertDialog(
+                    title = {
+                        Text(text = "Make New Tag")
+                    },
+                    text = {
+                        OutlinedTextField(
+                            value = newTagName,
+                            onValueChange = {newTagName = it},
+//                        label = { Text(text = "New Tag")},
+                            placeholder = {
+                                Text(
+                                    text = "e.g. 'daily rant'",
+                                    modifier = Modifier.alpha(0.8f)
+                                )
+                            }
+                        )
+                    },
+                    onDismissRequest = {makeTag.value = false},
+                    dismissButton = {
+                        TextButton(onClick = { makeTag.value = false }) {
+                            Text(text = "Cancel")
+                        }
+                    },
+                    confirmButton = {
+                        TextButton(
+                            onClick = {
+//                            make new tag here
+                                makeTag.value = false
+                            },
+                            enabled = newTagName.isNotEmpty()
+                        ) {
+                            Text(text = "Add Tag")
+                        }
+                    }
+                )
             }
         }
     }
