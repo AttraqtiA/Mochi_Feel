@@ -222,11 +222,17 @@ class AuthRepositoryImpl @Inject constructor(
                         val hour = calendar.get(Calendar.HOUR_OF_DAY)
                         val minute = calendar.get(Calendar.MINUTE)
 
+                        val tagsCollection = entryDoc.reference.collection("tags")
+                        val tagsList = tagsCollection.get().await().documents.mapNotNull { tagDoc ->
+                            Tag(name = tagDoc.getString("name") ?: "")
+                        }.toMutableList()
+
                         EntryBox(
                             title = entryDoc.getString("title") ?: "",
                             entry = entryDoc.getString("content") ?: "",
                             time = "$hour:$minute",
-                            current_date = entryTimestamp.toDate()
+                            current_date = entryTimestamp.toDate(),
+                            tags_list = tagsList
                         )
                     } else {
                         null
