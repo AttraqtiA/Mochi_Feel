@@ -77,6 +77,7 @@ fun ViewNewEntry(
 //    val entriesData by newEntryViewModel.entriesData.collectAsState()
 
     val makeTag = remember { mutableStateOf(false) }
+    val makeEntry = remember { mutableStateOf(false) }
 
     var entryContent by remember { mutableStateOf("") }
     var entryTitle by remember { mutableStateOf("New Entry") }
@@ -340,28 +341,24 @@ fun ViewNewEntry(
                     .padding(8.dp),
 
             ) {
-                Button(
+                TextButton(
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
                         .offset(x = 8.dp, y = 8.dp)
-                        .animateContentSize(),
-//                    elevation = FloatingActionButtonDefaults.elevation(0.dp),
-                    onClick = { if(canAdd){
-                        /*TODO*/
-//                        insert function to add new entry here
-                    } },
-//                    containerColor = CalmGreenLight,
-//                    contentColor = CalmGreenLight,
-                    shape = RoundedCornerShape(10.dp),
+                        .animateContentSize()
+                        .background(CalmGreenLight, RoundedCornerShape(10.dp)),
+                    onClick = { makeEntry.value = true },
+                    enabled = canAdd
                 ) {
-                        Text(
-                            text = if(canAdd) "+ Add New Entry" else "+",
-                            color = Color.White,
-                            modifier = Modifier
-                                .padding(horizontal = 12.dp)
-                                .animateContentSize()
-                        )
+                    Text(
+                        text = if(canAdd) "+ Add New Entry" else "+",
+                        color = Color.White,
+                        modifier = Modifier
+                            .padding(horizontal = 12.dp)
+                            .animateContentSize()
+                    )
                 }
+
                 Box(modifier = Modifier
                     .zIndex(-1.0f)
                     .fillMaxSize()
@@ -408,11 +405,9 @@ fun ViewNewEntry(
                         OutlinedTextField(
                             value = newTagName,
                             onValueChange = {newTagName = it},
-//                        label = { Text(text = "New Tag")},
                             placeholder = {
                                 Text(
                                     text = "e.g. 'daily rant'",
-//                                    modifier = Modifier.alpha(0.8f)
                                 )
                             }
                         )
@@ -436,6 +431,44 @@ fun ViewNewEntry(
                     }
                 )
             }
+
+            if(makeEntry.value){
+                AlertDialog(
+                    title = {
+                        Text(text = "Name your Entry")
+                    },
+                    text = {
+                        OutlinedTextField(
+                            value = entryTitle,
+                            onValueChange = {entryTitle = it},
+                            placeholder = {
+                                Text(
+                                    text = "Name it here!",
+                                )
+                            }
+                        )
+                    },
+                    onDismissRequest = {makeEntry.value = false},
+                    dismissButton = {
+                        TextButton(onClick = { makeEntry.value = false }) {
+                            Text(text = "Cancel")
+                        }
+                    },
+                    confirmButton = {
+                        TextButton(
+                            onClick = {
+//                            make new tag here
+                                makeEntry.value = false
+                            },
+                            enabled = entryTitle.isNotEmpty()
+                        ) {
+                            Text(text = "Add Entry")
+                        }
+                    }
+                )
+            }
+
+
         }
     }
 }
