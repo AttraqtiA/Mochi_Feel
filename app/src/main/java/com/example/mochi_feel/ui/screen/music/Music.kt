@@ -9,9 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -21,6 +19,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -30,7 +29,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.mochi_feel.R
 import com.example.mochi_feel.model.Music
 import com.example.mochi_feel.ui.theme.CalmGreen
 import com.example.mochi_feel.ui.theme.inter
@@ -77,7 +75,6 @@ fun MusicView(
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxWidth()
-                        .padding(start = 32.dp)
                 )
 //                Image(
 //                    painter = painterResource(id = R.drawable.sound_off),
@@ -113,12 +110,6 @@ fun MusicBar(
         Color.White
     } else {
         CalmGreen
-    }
-
-    val play_or_pause = if (musicViewModel.isPlaying()) {
-        R.drawable.pause_button
-    } else {
-        R.drawable.play_button
     }
 
     Row(
@@ -163,16 +154,16 @@ fun MusicBar(
         }
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .width(4.dp)
-                .height(16.dp)
         ) {
             Image(
-                painter = painterResource(id = play_or_pause),
+                painter = painterResource(
+                    id = musicViewModel.returnPlayOrPauseButton()
+                ),
+
                 contentDescription = "image description",
                 contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize()
-                    .size(32.dp)
+                modifier = Modifier.width(24.dp),
+                colorFilter = ColorFilter.tint(Color.White)
             )
         }
     }
