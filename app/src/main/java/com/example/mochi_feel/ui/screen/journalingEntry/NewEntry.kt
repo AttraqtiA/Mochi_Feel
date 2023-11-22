@@ -75,10 +75,11 @@ fun ViewNewEntry(
     viewModel: NewEntryViewModel = hiltViewModel()
 ){
 
-    var selectedTags by remember { mutableStateOf(viewModel.selectedTags) }
+
 //    viewModel:NewEntryViewModel = hiltViewModel()
     viewModel.initiate()
     val userData by viewModel.userData.collectAsState()
+    var selectedTags by remember { mutableStateOf(viewModel.selectedTags) }
 
     val makeTag = remember { mutableStateOf(false) }
     val makeEntry = remember { mutableStateOf(false) }
