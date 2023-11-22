@@ -18,12 +18,13 @@ import androidx.compose.ui.unit.sp
 import com.example.mochi_feel.model.Tag
 import com.example.mochi_feel.ui.theme.CalmGreen
 import com.example.mochi_feel.ui.theme.inter
+import java.util.Date
 
 @Composable
 fun OneEntryBox(
     title: String,
     time: String,
-    current_date: String,
+    current_date: Date?,
     tags_list: MutableList<Tag>,
     entry: String
 ) {

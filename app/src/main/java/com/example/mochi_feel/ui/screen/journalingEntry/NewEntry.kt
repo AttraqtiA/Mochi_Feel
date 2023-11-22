@@ -64,7 +64,6 @@ import com.example.mochi_feel.ui.screen.statisticsProfile.formatDate
 import com.example.mochi_feel.ui.theme.CalmGreen
 import com.example.mochi_feel.ui.theme.CalmGreenLight
 import com.example.mochi_feel.viewmodel.Journaling_Entry.HomeViewModel
-import com.example.mochi_feel.viewmodel.Journaling_Entry.NewEntryViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("RememberReturnType")
@@ -73,7 +72,7 @@ fun ViewNewEntry(
     saveNewEntry: () -> Unit,
     toHelpPage: () -> Unit,
     toBack: () -> Unit,
-    newEntryViewModel: NewEntryViewModel = hiltViewModel()
+//    newEntryViewModel: NewEntryViewModel = hiltViewModel()
 ){
 //    val entriesData by newEntryViewModel.entriesData.collectAsState()
 

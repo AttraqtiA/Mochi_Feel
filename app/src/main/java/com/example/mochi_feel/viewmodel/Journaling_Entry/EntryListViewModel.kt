@@ -47,4 +47,15 @@ class EntryListViewModel @Inject constructor(
             _entriesData.value = sortedEntries as MutableList<EntryBox>?
         }
     }
+
+    fun sortDateAscending() {
+        val uid = userManager.getUserUid()
+        viewModelScope.launch {
+            val result = uid?.let { repository.fetchUserData(it) }
+            val sortedEntries =
+                result?.entries?.toMutableList()?.sortedBy { it.current_date }
+
+            _entriesData.value = sortedEntries as MutableList<EntryBox>?
+        }
+    }
 }

@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -45,10 +44,10 @@ import com.example.mochi_feel.viewmodel.Journaling_Entry.EntryListViewModel
 
 @Composable
 fun ViewEntry(
-//    viewModel: EntryListViewModel = hiltViewModel()
+    viewModel: EntryListViewModel = hiltViewModel()
 ) {
-//    viewModel.initiate()
-//    val entriesData by viewModel.entriesData.collectAsState()
+    viewModel.initiate()
+    val entriesData by viewModel.entriesData.collectAsState()
 
     val dummyData:MutableList<EntryBox> = mutableListOf(
         EntryBox(
@@ -142,6 +141,10 @@ fun ViewEntry(
         )
 
     var sortAscend by remember { mutableStateOf(false) }
+
+    if(sortAscend) {
+        viewModel.sortDateAscending()
+    }
     var searchFilter by remember { mutableStateOf("") }
 
     Column(
@@ -153,7 +156,7 @@ fun ViewEntry(
         Column(
             modifier = Modifier
                 .fillMaxWidth(0.9f)
-                .padding(top = 12.dp),
+                .padding(top = 20.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
 //            Header
@@ -285,13 +288,12 @@ fun ViewEntry(
 //                        entrybox.entry
 //                    )
 //                }
-
-                items(dummyData){entrybox:EntryBox->
+                items(entriesData?: emptyList()){entrybox:EntryBox->
                     if(entrybox.title.uppercase().contains(searchFilter.uppercase())){
                         OneEntryBox(
                             entrybox.title,
                             entrybox.time,
-                            entrybox.getEntryBoxDate(),
+                            entrybox.current_date,
                             entrybox.tags_list,
                             entrybox.entry
                         )
