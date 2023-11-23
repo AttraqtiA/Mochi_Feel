@@ -223,7 +223,7 @@ fun MochiFeelRoute() {
                 ViewEntry(
 //                    val uid: Int = 0,
 //                    { navController.navigate("${MochiFeel_Screen.EntryDetail.name}/$uid") }
-                    { navController.navigate("${MochiFeel_Screen.EntryDetail.name}/$0") }
+                    { navController.navigate("${MochiFeel_Screen.EntryDetail.name}/5qQDKPtRj6UGkXvr61Y5") }
                 )
             }
 
@@ -236,7 +236,7 @@ fun MochiFeelRoute() {
                 )
             }
 
-            composable(MochiFeel_Screen.EntryDetail.name) {
+            composable(MochiFeel_Screen.EntryDetail.name+"/{uid}") {
                 canNavigateBack = false
                 ViewEntryDetail(
                     { navController.navigateUp() }
