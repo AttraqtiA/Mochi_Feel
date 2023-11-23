@@ -220,7 +220,8 @@ fun ViewNewEntry(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                         content = {
-                            items(tagsList){tag:Tag ->
+//                            items(tagsList){tag:Tag ->
+                            items(userData?.tags.orEmpty()) { tag: Tag ->
                                 Text(text = tag.name,
                                     style = if(tag in selectedTags)tagSelectedText else tagUnselectedText,
                                     modifier = if(tag in selectedTags){

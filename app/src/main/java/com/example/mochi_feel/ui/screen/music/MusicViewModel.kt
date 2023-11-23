@@ -2,6 +2,7 @@ package com.example.mochi_feel.ui.screen.music
 
 import android.content.Context
 import android.media.MediaPlayer
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -27,6 +28,8 @@ class MusicViewModel : ViewModel() {
 
     private var _selectedMusic = mutableStateOf<Music?>(null)
     var selectedMusic: State<Music?> = _selectedMusic
+
+    var PlayOrPause: Boolean = true
 
     fun getMusicList(): MutableList<Music> {
         return privateMusicList
@@ -65,16 +68,30 @@ class MusicViewModel : ViewModel() {
 
     fun playPauseToggle(music: Music, context: Context) {
         if (isPlaying() && music == getCurrentMusic()) {
+            Log.d("playorpause", "true")
+
             pauseMusic()
+            PlayOrPause = true // true = play button when paused
         } else {
+            Log.d("playorpause", "false")
+
             initializeMediaPlayer(context, music)
             startMusic()
             _selectedMusic.value = music
+            PlayOrPause = false
         }
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        stopMusic()
+    fun returnPlayOrPauseButton(): Int {
+        if (PlayOrPause) {
+            return R.drawable.play_button
+        } else {
+            return R.drawable.pause_button
+        }
     }
+
+//    override fun onCleared() {
+//        super.onCleared()
+//        stopMusic()
+//    }
 }

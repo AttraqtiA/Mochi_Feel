@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mochi_feel.data.AuthRepositoryImpl
 import com.example.mochi_feel.model.EntryBox
+import com.example.mochi_feel.model.Tag
 import com.example.mochi_feel.model.User
 import com.example.mochi_feel.model.UserManager
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,6 +22,9 @@ class EntryListViewModel @Inject constructor(
 
     val userData: StateFlow<User?> = _userData
     val entriesData : StateFlow<MutableList<EntryBox>?> = _entriesData
+
+    private val _selectedTags : MutableList<Tag> = mutableListOf()
+    val selectedTags = _selectedTags
 
     @Inject
     lateinit var userManager: UserManager
